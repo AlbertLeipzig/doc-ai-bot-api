@@ -1,0 +1,40 @@
+{
+  "name": "doc-ai-bot-api",
+  "version": "1.0.0",
+  "main": "dist/doc-ai-bot-api/src/server.js",
+  "type": "module",
+  "scripts": {
+    "dev": "tsx watch ./src/server.ts",
+    "branch:init": "git push --set-upstream origin $(git branch --show-current)",
+    "branch:main": "git switch main && git pull",
+    "branch:new": "git checkout -b",
+    "branch:sanity": "git add . && git commit -m 'wip' && git push"
+  },
+  "keywords": [],
+  "author": "Albert_Fuchs",
+  "license": "ISC",
+  "description": "",
+  "dependencies": {
+    "@langchain/textsplitters": "^1.0.1",
+    "axios": "^1.13.5",
+    "cheerio": "^1.2.0",
+    "cookie-parser": "^1.4.7",
+    "cors": "^2.8.6",
+    "dotenv": "^17.3.1",
+    "express": "^5.2.1",
+    "express-rate-limit": "^8.3.1",
+    "express-rate-limiter": "^1.3.1",
+    "jsonwebtoken": "^9.0.3",
+    "langchain": "^1.2.25",
+    "mongoose": "^9.2.1"
+  },
+  "devDependencies": {
+    "@types/cookie-parser": "^1.4.10",
+    "@types/cors": "^2.8.19",
+    "@types/express": "^5.0.5",
+    "@types/jsonwebtoken": "^9.0.10",
+    "@types/node": "^24.5.2",
+    "tsx": "^4.20.5",
+    "typescript": "^5.9.2"
+  }
+}
