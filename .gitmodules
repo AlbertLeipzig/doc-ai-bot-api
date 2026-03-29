@@ -1,0 +1,6 @@
+[submodule "types.ts"]
+	path = types.ts
+	url = https://github.com/AlbertLeipzig/doc-ai-bot-types
+[submodule "src/types"]
+	path = src/types
+	url = https://github.com/AlbertLeipzig/doc-ai-bot-types

@@ -1,7 +1,4 @@
-type Endpoint = {
-  path: string;
-  method: "GET" | "POST" | "PATCH" | "DELETE";
-};
+import type{Endpoint} from "../types/types.ts"
 
 const apiUrl = "http://api:7777";
 const benchmarkUrl = "http://api:7778";

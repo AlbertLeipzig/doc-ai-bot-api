@@ -1,7 +1,7 @@
 import type {
   GenerationMessages,
   GenerationOptions,
-} from "../../../shared/types.ts";
+} from "../types/types.ts";
 import { apiConfig } from "../../apiConfig.ts";
 import axios from "axios";
 import { sleep } from "./sleepService.ts";

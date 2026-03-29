@@ -9,7 +9,7 @@ import type {
   DocsConfig,
   LoadedDoc,
   EmbeddedDoc,
-} from "../../../shared/types.ts";
+} from "../types/types.ts";
 
 type IngestionOverrides = {
   chunkSize?: number;
