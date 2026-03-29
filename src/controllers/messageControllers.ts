@@ -1,8 +1,6 @@
 import type { NextFunction, Request, Response } from "express";
 import { Message } from "../models/messageModel.ts";
 import { isValidObjectId } from "mongoose";
-import axios from "axios";
-import { apiConfig } from "../../apiConfig.ts";
 
 const _create = async (req: Request, res: Response, next: NextFunction) => {
   try {

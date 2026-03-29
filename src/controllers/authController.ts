@@ -1,16 +1,7 @@
 import type { Request, Response, NextFunction } from "express";
 import jwt from "jsonwebtoken";
 import { apiConfig } from "../../apiConfig.ts";
-/* const {cookieOptions} = apiConfig.server */
-
-console.log("AUTH CONTROLLER")
-
-const cookieOptions = {
-  httpOnly: true,
-  sameSite: "strict" as const,
-  secure: apiConfig.server.mode === "production",
-  maxAge: 24 * 60 * 60 * 1000,
-};
+const { cookieOptions } = apiConfig.server;
 
 const _login = async (req: Request, res: Response, next: NextFunction) => {
   try {

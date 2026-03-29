@@ -1,5 +1,4 @@
 import { apiConfig } from "../../apiConfig.ts";
-import { embed as embeddingService } from "./embeddingService.ts";
 
 const { retrieve, embed } = apiConfig.llm;
 

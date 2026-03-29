@@ -1,7 +1,7 @@
 import mongoose from "mongoose";
 import type { Model } from "mongoose";
 import { apiConfig } from "../../apiConfig.ts";
-import type { VectorData } from "../../../shared/types.ts";
+import type { VectorData } from "../types/types.ts";
 
 const { model, Schema, models } = mongoose;
 

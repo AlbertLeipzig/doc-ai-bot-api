@@ -1,5 +1,5 @@
 import mongoose from "mongoose";
-import type { ConversationData } from "../../../shared/types.ts";
+import type { ConversationData } from "../types/types.ts";
 
 const { model, Schema } = mongoose;
 

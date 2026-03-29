@@ -6,13 +6,7 @@ import { retrieveService } from "../services/retrieveService.ts";
 import { embed } from "../services/embeddingService.ts";
 import { generate } from "../services/generationServices.ts";
 import { apiConfig } from "../../apiConfig.ts";
-
-type AskBody = {
-  question: string;
-  vectorProfileId: string;
-  conversationId?: string;
-  topK?: number;
-};
+import { AskBody } from "../types/types.ts";
 
 export const chatController = async (
   req: Request,

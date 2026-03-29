@@ -1,8 +1,5 @@
 import type { NextFunction, Request, Response } from "express";
 import { VectorProfile } from "../models/vectorProfileModel.ts";
-import { apiConfig } from "../../apiConfig.ts";
-import { generate } from "../services/generationServices.ts";
-import { db } from "../services/dbService.ts";
 
 const _create = async (req: Request, res: Response, next: NextFunction) => {
   try {

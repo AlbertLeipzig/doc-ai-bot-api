@@ -2,16 +2,7 @@ import type { NextFunction, Request, Response } from "express";
 import { VectorModel, getDynamicVectorModel } from "../models/vectorModel.ts";
 import { isValidObjectId } from "mongoose";
 import { embed } from "../services/embeddingService.ts";
-import { generate } from "../services/generationServices.ts";
-import { ingest } from "../services/ingestionService.ts";
-import { retrieveService } from "../services/retrieveService.ts";
-import { apiConfig } from "../../apiConfig.ts";
-
-type VectorUpdateData = {
-  metadata?: unknown;
-  content?: string;
-  embedding?: unknown;
-};
+/* import {VectorUpdateData} from "../types/types.ts" */
 
 /* LIKELY TO BE DELETED IN FEW DAYS */
 
