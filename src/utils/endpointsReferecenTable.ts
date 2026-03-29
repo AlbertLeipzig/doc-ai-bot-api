@@ -38,7 +38,3 @@ export const endpointsReferenceTable: Record<string, Endpoint> = {
 
 /* Placeholder Function to Create Request Urls */
 /* The actual goal is to have a Centralized Request Builder Function that  */
-export const getRequestUrl = (requestName: string, id?: string): string => {
-  const _id = id ?? "";
-  return `${endpointsReferenceTable[requestName].path}/${_id}`;
-};
