@@ -1,4 +1,5 @@
 import type { NextFunction, Request, Response } from "express";
+import { createResponse } from "../utils/createResponse.ts";
 import { VectorProfile } from "../models/vectorProfileModel.ts";
 
 const _create = async (req: Request, res: Response, next: NextFunction) => {
