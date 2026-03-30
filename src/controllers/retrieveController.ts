@@ -2,6 +2,7 @@ import { Request, Response, NextFunction } from "express";
 import { retrieveService } from "../services/retrieveService.ts";
 import { VectorModel } from "../models/vectorModel.ts";
 import { embed } from "../services/embeddingService.ts";
+import { createResponse } from "../utils/createResponse.ts";
 
 export const _retrieve = async (
   req: Request,
@@ -11,9 +12,7 @@ export const _retrieve = async (
   try {
     const { query, k, _vectorProfileId } = req.body;
 
-    if (!query) {
-      return res.status(400).json({ error: "Query is required" });
-    }
+    if (!query) return createResponse({res, messageCode : "retrieve_missingQuery"})
 
     const queryEmbedding = await embed.query(query);
     const limit = retrieveService.getTopK(k);

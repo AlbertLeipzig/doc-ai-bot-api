@@ -5,6 +5,7 @@ import { VectorModel } from "../models/vectorModel.ts";
 import { apiConfig } from "../../apiConfig.ts";
 import { generate } from "../services/generationServices.ts";
 import { url } from "../services/urlServices.ts";
+import { createResponse } from "../utils/createResponse.ts";
 
 /* const _ingestSingleDocument = async (
   req: Request,
@@ -156,10 +157,8 @@ export const _ingest = async (
     const baseUrl = _baseUrl ?? apiConfig.llm.docs.baseUrl;
     const maxPages = _maxPages ?? apiConfig.llm.docs.maxPages;
     const urls = await url.documentation(baseUrl, maxPages);
-    if (!urls?.length) {
-      res.status(400).json({ error: "At least one baseUrl is required" });
-      return;
-    }
+    if (!urls?.length)
+      return createResponse({ res, messageCode: "missingUrl" });
 
     // 2. Resolve or create vectorProfile once — shared across all URLs
     let vectorProfileId = _vectorProfileId ?? null;
