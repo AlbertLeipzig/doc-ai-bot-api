@@ -37,9 +37,12 @@ export const chatController = async (
       const existing = await Conversation.findById(
         resolvedConversationId,
       ).lean();
-      if (!existing) return createResponse({res, messageCode : "notFound", data : {error :`conversation ${resolvedConversationId} not found` }}){
-        
-      }
+      if (!existing)
+        return createResponse({
+          res,
+          messageCode: "notFound",
+          data: { error: `conversation ${resolvedConversationId} not found` },
+        });
     } else {
       const newConversation = await Conversation.create({
         vectorProfileId: vectorProfileId,
@@ -79,9 +82,11 @@ export const chatController = async (
     });
 
     // 7. Respond
-    createResponse({res, messageCode : "create", data : {conversationId: resolvedConversationId,
-      answer,}})
-    
+    createResponse({
+      res,
+      messageCode: "create",
+      data: { conversationId: resolvedConversationId, answer },
+    });
   } catch (e) {
     next(e);
   }
