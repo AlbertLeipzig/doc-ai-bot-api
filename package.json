@@ -9,7 +9,7 @@
     "branch:main": "git switch main && git pull",
     "branch:new": "git checkout -b",
     "branch:sanity": "git add . && git commit -m 'wip' && git push",
-    "update-types": "git submodule update --init --recursive"
+    "update-types": "git submodule update --init --recursive --remote"
   },
   "keywords": [],
   "author": "Albert_Fuchs",
