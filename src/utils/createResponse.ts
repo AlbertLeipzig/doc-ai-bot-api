@@ -3,12 +3,13 @@ import { systemMessagesTable } from "./systemMessagesTable.ts";
 
 type ExitResponse = {
   res: Response;
-  messageCode: string;
+  messageCode?: string;
   data?: unknown;
 };
 
 export const createResponse = ({ res, messageCode, data }: ExitResponse) => {
-  const { codeNumber, userMessage } = systemMessagesTable[messageCode];
+  const _messageCode = messageCode ?? "general_exception";
+  const { codeNumber, userMessage } = systemMessagesTable[_messageCode];
   if (data !== undefined) return res.status(codeNumber).json(data);
   if (userMessage) return res.status(codeNumber).json({ userMessage });
   return res.sendStatus(codeNumber);

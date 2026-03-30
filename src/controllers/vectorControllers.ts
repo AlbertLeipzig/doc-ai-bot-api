@@ -2,6 +2,7 @@ import type { NextFunction, Request, Response } from "express";
 import { VectorModel, getDynamicVectorModel } from "../models/vectorModel.ts";
 import { isValidObjectId } from "mongoose";
 import { embed } from "../services/embeddingService.ts";
+import { createResponse } from "../utils/createResponse.ts";
 /* import {VectorUpdateData} from "../types/types.ts" */
 
 /* LIKELY TO BE DELETED IN FEW DAYS */
@@ -10,9 +11,8 @@ const _create = async (req: Request, res: Response, next: NextFunction) => {
   try {
     const { content, metadata } = req.body;
 
-    if (!content) {
-      return res.status(400).json({ error: "Content is required" });
-    }
+    if (!content)
+      return createResponse({ res, messageCode: "missingContent" });
 
     const embedding = await embed.query(content);
 
@@ -21,7 +21,7 @@ const _create = async (req: Request, res: Response, next: NextFunction) => {
       embedding,
     });
 
-    res.sendStatus(201);
+    createResponse({ res, messageCode: "create" });
   } catch (e) {
     next(e);
   }
@@ -33,12 +33,15 @@ const _createMany = async (req: Request, res: Response, next: NextFunction) => {
     const { vectors, collectionName } = req.body;
 
     if (!collectionName) {
-      return next("Placeholder Error");
+      createResponse({
+        res,
+        messageCode: "missingCollectionName",
+      });
     }
 
     const DynamicVectorModel = getDynamicVectorModel(collectionName);
     await DynamicVectorModel.create(vectors);
-    res.sendStatus(201);
+    createResponse({ res, messageCode: "create" });
   } catch (e) {
     next(e);
   }
@@ -46,12 +49,12 @@ const _createMany = async (req: Request, res: Response, next: NextFunction) => {
 
 const _read = async (req: Request, res: Response, next: NextFunction) => {
   try {
-    if (!isValidObjectId(req.params.id)) {
-      return res.status(400).json({ error: "Invalid vector id" });
-    }
-
+    if (!isValidObjectId(req.params.id))
+      return createResponse({ res, messageCode: "invalidId" });
     const vector = await VectorModel.findById(req.params.id);
-    vector ? res.status(200).json(vector) : res.sendStatus(404);
+    vector
+      ? createResponse({ res, messageCode: "get", data: vector })
+      : createResponse({ res, messageCode: "notFound" });
   } catch (e) {
     next(e);
   }
@@ -60,7 +63,9 @@ const _read = async (req: Request, res: Response, next: NextFunction) => {
 const _readMany = async (req: Request, res: Response, next: NextFunction) => {
   try {
     const vectors = await VectorModel.find();
-    res.status(200).json(vectors);
+    vectors
+      ? createResponse({ res, messageCode: "get", data: vectors })
+      : createResponse({ res, messageCode: "notFound" });
   } catch (e) {
     next(e);
   }
@@ -68,9 +73,8 @@ const _readMany = async (req: Request, res: Response, next: NextFunction) => {
 
 const _delete = async (req: Request, res: Response, next: NextFunction) => {
   try {
-    if (!isValidObjectId(req.params.id)) {
-      return res.status(400).json({ error: "Invalid vector id" });
-    }
+    if (!isValidObjectId(req.params.id))
+      return createResponse({ res, messageCode: "invalidId" });
 
     const vector = await VectorModel.findByIdAndDelete(req.params.id);
     vector ? res.status(200).json(vector) : res.sendStatus(404);
@@ -82,7 +86,7 @@ const _delete = async (req: Request, res: Response, next: NextFunction) => {
 const _deleteMany = async (req: Request, res: Response, next: NextFunction) => {
   try {
     await VectorModel.deleteMany();
-    res.sendStatus(200);
+    createResponse({ res, messageCode: "delete" });
   } catch (e) {
     next(e);
   }

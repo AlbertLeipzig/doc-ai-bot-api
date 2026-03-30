@@ -16,6 +16,7 @@ export const systemMessagesTable: Record<string, ApiResponse> = {
   verify: { codeNumber: 200 },
   verify_no_token: { codeNumber: 401 },
   verify_wrong_token: { codeNumber: 401 },
+  retrieve_missingQuery: { codeNumber: 400, userMessage: "Query is required" },
   /* REQUEST */
   deleteOne: { codeNumber: 200 },
   deleteMany: { codeNumber: 200 },
@@ -27,5 +28,28 @@ export const systemMessagesTable: Record<string, ApiResponse> = {
     userMessage: "This collection seems to be empty",
   },
   notFound: { codeNumber: 404 },
+  /* SPECIFIC REQUEST MESSAGES */
+  missingContent: {
+    codeNumber: 400,
+    userMessage: "content is required",
+  },
+  missingCollectionName: {
+    codeNumber: 400,
+    userMessage: "a collection is required",
+  },
+  invalidId: {
+    codeNumber: 400,
+    userMessage: "invalid vector id",
+  },
+  missingUrl : {
+    codeNumber : 400,
+    userMessage : "at least one url is necessary"
+  },
+  missingConversation : {
+    codeNumber : 400,
+    userMessage : "a conversation id is needed"
+  },
+
+  /* FALLBACK MESSAGE */
   general_exception: { codeNumber: 500 },
 };
