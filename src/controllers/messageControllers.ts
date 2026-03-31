@@ -47,7 +47,7 @@ const _readMany = async (req: Request, res: Response, next: NextFunction) => {
       })
       .populate("conversationId");
 
-    message?.length > 0
+    messages?.length > 0
       ? createResponse({
           res,
           messageCode: "getList",
@@ -80,7 +80,7 @@ const _delete = async (req: Request, res: Response, next: NextFunction) => {
 const _deleteMany = async (req: Request, res: Response, next: NextFunction) => {
   try {
     await Message.deleteMany();
-    createResponse({ res, codeMessage: "deleteMany" });
+    createResponse({ res, messageCode: "deleteMany" });
   } catch (e) {
     next(e);
   }

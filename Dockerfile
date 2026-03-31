@@ -1,9 +1,17 @@
 FROM node:20-alpine
+
 WORKDIR /app
-COPY doc-ai-bot-api/ ./doc-ai-bot-api/
-COPY shared/ ./shared/
-WORKDIR /app/doc-ai-bot-api
+
+COPY package*.json ./
 RUN npm ci
+
+COPY tsconfig*.json ./
+COPY src/ ./src/
+COPY apiConfig.ts ./
+COPY types.ts/ ./types/
+
 RUN npm run build
+
 EXPOSE 7777
-CMD ["node", "dist/doc-ai-bot-api/src/server.js"]
+
+CMD ["node", "dist/src/server.js"]
