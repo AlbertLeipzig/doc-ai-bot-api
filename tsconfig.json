@@ -4,7 +4,7 @@
     "module": "NodeNext",
     "moduleResolution": "NodeNext",
     "outDir": "dist",
-    "rootDir": "..",
+    "rootDir": ".",
     "rewriteRelativeImportExtensions": true,
     "strict": false,
     "skipLibCheck": true,
@@ -13,6 +13,6 @@
     "resolveJsonModule": true,
     "composite": false
   },
-  "include": ["src/**/*.ts", "../shared/**/*.ts"],
+  "include": ["src/**/*.ts", "types/**/*.ts", "apiConfig.ts"],
   "exclude": ["dist", "node_modules"]
 }

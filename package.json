@@ -4,6 +4,7 @@
   "main": "dist/doc-ai-bot-api/src/server.js",
   "type": "module",
   "scripts": {
+    "build": "tsc",
     "dev": "tsx watch ./src/server.ts",
     "branch:init": "git push --set-upstream origin $(git branch --show-current)",
     "branch:main": "git switch main && git pull",

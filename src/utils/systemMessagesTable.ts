@@ -1,4 +1,4 @@
-import { ApiResponse } from "../types/types.ts";
+import { ApiResponse } from "../../types/types.ts";
 
 export const systemMessagesTable: Record<string, ApiResponse> = {
   /* SYSTEM */
