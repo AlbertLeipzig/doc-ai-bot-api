@@ -7,6 +7,7 @@ import { embed } from "../services/embeddingService.ts";
 import { generate } from "../services/generationServices.ts";
 import { apiConfig } from "../../apiConfig.ts";
 import { AskBody } from "../types/types.ts";
+import { createResponse } from "../utils/createResponse.ts";
 
 export const chatController = async (
   req: Request,
@@ -22,12 +23,12 @@ export const chatController = async (
     } = req.body as AskBody;
 
     // 1. Validate
-    if (!question || !vectorProfileId) {
-      res
-        .status(400)
-        .json({ error: "question and vectorProfileId are required" });
-      return;
-    }
+    if (!question || !vectorProfileId)
+      return createResponse({
+        res,
+        messageCode: "missingContent",
+        data: { message: "missing question and / or vector profile id" },
+      });
 
     // 2. Resolve conversation
     let resolvedConversationId = conversationId ?? null;
@@ -36,12 +37,12 @@ export const chatController = async (
       const existing = await Conversation.findById(
         resolvedConversationId,
       ).lean();
-      if (!existing) {
-        res
-          .status(404)
-          .json({ error: `conversation ${resolvedConversationId} not found` });
-        return;
-      }
+      if (!existing)
+        return createResponse({
+          res,
+          messageCode: "notFound",
+          data: { error: `conversation ${resolvedConversationId} not found` },
+        });
     } else {
       const newConversation = await Conversation.create({
         vectorProfileId: vectorProfileId,
@@ -81,9 +82,10 @@ export const chatController = async (
     });
 
     // 7. Respond
-    res.status(201).json({
-      conversationId: resolvedConversationId,
-      answer,
+    createResponse({
+      res,
+      messageCode: "create",
+      data: { conversationId: resolvedConversationId, answer },
     });
   } catch (e) {
     next(e);

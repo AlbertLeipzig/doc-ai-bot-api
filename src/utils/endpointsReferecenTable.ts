@@ -1,4 +1,4 @@
-import type { Endpoint } from "../types/types.ts";
+import type { Endpoint } from "../../types/types.ts";
 
 export const endpointsReferenceTable: Record<string, Endpoint> = {
   /* health - remember, health and ready don't have a common endpoint*/

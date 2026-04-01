@@ -137,8 +137,8 @@ const discoverByCrawling = async (baseUrl, maxPages) => {
           queue.push(absolute);
         }
       });
-    } catch (error) {
-      console.warn(`Skipping ${current}:`, error.message);
+    } catch {
+      return;
     }
   }
 

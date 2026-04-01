@@ -1,10 +1,11 @@
 import type { NextFunction, Request, Response } from "express";
+import { createResponse } from "../utils/createResponse.ts";
 import { VectorProfile } from "../models/vectorProfileModel.ts";
 
 const _create = async (req: Request, res: Response, next: NextFunction) => {
   try {
-    const vectorProfile = await VectorProfile.create(req.body);
-    res.status(201).json(vectorProfile);
+    await VectorProfile.create(req.body);
+    createResponse({ res, messageCode: "create" });
   } catch (e) {
     next(e);
   }
@@ -13,7 +14,9 @@ const _create = async (req: Request, res: Response, next: NextFunction) => {
 const _read = async (req: Request, res: Response, next: NextFunction) => {
   try {
     const vectorProfile = await VectorProfile.findById(req.params.id);
-    res.status(200).json(vectorProfile);
+    vectorProfile
+      ? createResponse({ res, messageCode: "get", data: vectorProfile })
+      : createResponse({ res, messageCode: "notFound" });
   } catch (e) {
     next(e);
   }
@@ -23,8 +26,8 @@ const _readMany = async (req: Request, res: Response, next: NextFunction) => {
   try {
     const vectorProfiles = await VectorProfile.find();
     vectorProfiles.length > 0
-      ? res.status(200).json(vectorProfiles)
-      : res.sendStatus(404);
+      ? createResponse({ res, messageCode: "getList", data: vectorProfiles })
+      : createResponse({ res, messageCode: "getList_empty" });
   } catch (e) {
     next(e);
   }
@@ -32,7 +35,9 @@ const _readMany = async (req: Request, res: Response, next: NextFunction) => {
 const _delete = async (req: Request, res: Response, next: NextFunction) => {
   try {
     const vectorProfile = await VectorProfile.findByIdAndDelete(req.params.id);
-    vectorProfile ? res.status(200).json(vectorProfile) : res.sendStatus(404);
+    vectorProfile
+      ? createResponse({ res, messageCode: "deleteOne" })
+      : createResponse({ res, messageCode: "notFound" });
   } catch (e) {
     next(e);
   }
@@ -41,7 +46,7 @@ const _delete = async (req: Request, res: Response, next: NextFunction) => {
 const _deleteMany = async (req: Request, res: Response, next: NextFunction) => {
   try {
     await VectorProfile.deleteMany();
-    res.sendStatus(200);
+    createResponse({ res, messageCode: "deleteMany" });
   } catch (e) {
     next(e);
   }
@@ -54,7 +59,9 @@ const getVectorProfileList = async (
 ) => {
   try {
     const profiles = await VectorProfile.find().sort({ _id: -1 }).lean();
-    res.status(200).json(profiles);
+    profiles.length > 0
+      ? createResponse({ res, messageCode: "deleteMany", data: profiles })
+      : createResponse({ res, messageCode: "getList_empty" });
   } catch (e) {
     next(e);
   }
