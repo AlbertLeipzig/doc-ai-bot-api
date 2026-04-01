@@ -4,3 +4,6 @@
 [submodule "src/types"]
 	path = src/types
 	url = https://github.com/AlbertLeipzig/doc-ai-bot-types
+[submodule "types"]
+	path = types
+	url = https://github.com/AlbertLeipzig/doc-ai-bot-types
