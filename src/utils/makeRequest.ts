@@ -12,7 +12,7 @@ export const makeRequest = ({
   body: unknown;
 }) => {
   const requestReference = endpointsReferenceTable[name];
-  const url = getRequestUrl({ path: requestReference.path, id: _id });
+  const url = getRequestUrl({ path: requestReference.path, id });
   const method = requestReference.method.toUpperCase();
   const hasBody = !["GET", "DELETE"].includes(method);
 

@@ -5,11 +5,8 @@ import { apiConfig } from "../../apiConfig.ts";
 import { embed } from "./embeddingService.ts";
 import { url } from "../services/urlServices.ts";
 import { sleep } from "./sleepService.ts";
-import type {
-  DocsConfig,
-  LoadedDoc,
-  EmbeddedDoc,
-} from "../types/types.ts";
+import type { DocsConfig, LoadedDoc, EmbeddedDoc } from "../types/types.ts";
+import { createResponse } from "../utils/createResponse.ts";
 
 type IngestionOverrides = {
   chunkSize?: number;
@@ -115,31 +112,25 @@ const loadFromUrl = async (
   url: string,
   overrides: IngestionOverrides = {},
 ): Promise<LoadedDoc[]> => {
-  try {
-    const response = await axios.get(url, { timeout: 30000 });
-    const $ = cheerio.load(response.data);
+  const response = await axios.get(url, { timeout: 30000 });
+  const $ = cheerio.load(response.data);
 
-    const title = $("title").first().text().trim() || "Documentation";
-    const bodyText = $("main, article, .content, #content")
-      .text()
-      .replace(/\s+/g, " ")
-      .trim() || $("body").text().replace(/\s+/g, " ").trim();
-    const textSplitter = buildTextSplitter(overrides);
-    const chunks = await textSplitter.splitText(bodyText);
+  const title = $("title").first().text().trim() || "Documentation";
+  const bodyText =
+    $("main, article, .content, #content").text().replace(/\s+/g, " ").trim() ||
+    $("body").text().replace(/\s+/g, " ").trim();
+  const textSplitter = buildTextSplitter(overrides);
+  const chunks = await textSplitter.splitText(bodyText);
 
-    return chunks.map((chunk) => ({
-      content: chunk,
-      metadata: {
-        source: url,
-        url,
-        title,
-        type: "text",
-      },
-    }));
-  } catch (error) {
-    console.error(`Error loading URL ${url}:`, error);
-    throw error;
-  }
+  return chunks.map((chunk) => ({
+    content: chunk,
+    metadata: {
+      source: url,
+      url,
+      title,
+      type: "text",
+    },
+  }));
 };
 
 const loadFromDocumentation = async (
@@ -166,7 +157,7 @@ const loadFromDocumentation = async (
       allDocs.push(...docs);
       await sleep(requestDelayMs);
     } catch (error) {
-      console.error(`Failed to load ${url}, continuing...`);
+      continue;
     }
   }
 
@@ -177,38 +168,33 @@ const ingestDocuments = async (
   documents: LoadedDoc[],
   options: IngestionOverrides = {},
 ): Promise<EmbeddedDoc[]> => {
-  try {
-    if (!documents || documents.length === 0) {
-      throw new Error("No documents provided for ingestion");
-    }
-
-    const docsWithContent = documents.map((doc: LoadedDoc) => {
-      if (!doc.content) {
-        throw new Error("Each document must have a 'content' field");
-      }
-      return doc;
-    });
-
-    const embeddings = await embed.documents(
-      docsWithContent.map((doc: LoadedDoc) => doc.content),
-      {
-        model: options.model,
-      },
-    );
-
-    const docsWithEmbeddings = docsWithContent.map(
-      (doc: LoadedDoc, index: number) => ({
-        content: doc.content,
-        embedding: embeddings[index],
-        metadata: doc.metadata || {},
-      }),
-    );
-
-    return docsWithEmbeddings;
-  } catch (error) {
-    console.error("Error ingesting documents:", error);
-    throw error;
+  if (!documents || documents.length === 0) {
+    throw new Error("No documents provided for ingestion");
   }
+
+  const docsWithContent = documents.map((doc: LoadedDoc) => {
+    if (!doc.content) {
+      throw new Error("Each document must have a 'content' field");
+    }
+    return doc;
+  });
+
+  const embeddings = await embed.documents(
+    docsWithContent.map((doc: LoadedDoc) => doc.content),
+    {
+      model: options.model,
+    },
+  );
+
+  const docsWithEmbeddings = docsWithContent.map(
+    (doc: LoadedDoc, index: number) => ({
+      content: doc.content,
+      embedding: embeddings[index],
+      metadata: doc.metadata || {},
+    }),
+  );
+
+  return docsWithEmbeddings;
 };
 
 export const ingest = {

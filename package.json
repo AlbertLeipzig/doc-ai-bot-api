@@ -4,6 +4,7 @@
   "main": "dist/doc-ai-bot-api/src/server.js",
   "type": "module",
   "scripts": {
+    "build": "tsc",
     "dev": "tsx watch ./src/server.ts",
     "branch:init": "git push --set-upstream origin $(git branch --show-current)",
     "branch:main": "git switch main && git pull",
@@ -36,6 +37,6 @@
     "@types/jsonwebtoken": "^9.0.10",
     "@types/node": "^24.5.2",
     "tsx": "^4.20.5",
-    "typescript": "^5.9.2"
+    "typescript": "^5.9.2"    
   }
 }
