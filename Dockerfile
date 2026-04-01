@@ -8,7 +8,7 @@ RUN npm ci
 COPY tsconfig*.json ./
 COPY src/ ./src/
 COPY apiConfig.ts ./
-COPY types.ts/ ./types/
+COPY types/ ./types/
 
 RUN npm run build
 
