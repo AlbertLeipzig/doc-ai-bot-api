@@ -55,7 +55,7 @@ export const apiConfig: ApiConfig = {
       // ingestion request. benchmarkConfig.ingest is already configured to
       // crawl the d3js site, so using the same value here prevents the
       // accidental Three.js fallback that produced repeated 404 messages.
-      baseUrl: "https://d3js.org/",
+      baseUrl: "https://www.chartjs.org/",
       maxPages: 25,
       requestDelayMs: 500,
     },
