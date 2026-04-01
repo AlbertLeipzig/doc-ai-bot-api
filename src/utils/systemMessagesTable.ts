@@ -41,15 +41,14 @@ export const systemMessagesTable: Record<string, ApiResponse> = {
     codeNumber: 400,
     userMessage: "invalid vector id",
   },
-  missingUrl : {
-    codeNumber : 400,
-    userMessage : "at least one url is necessary"
+  missingUrl: {
+    codeNumber: 400,
+    userMessage: "at least one url is necessary",
   },
-  missingConversation : {
-    codeNumber : 400,
-    userMessage : "a conversation id is needed"
+  missingConversation: {
+    codeNumber: 400,
+    userMessage: "a conversation id is needed",
   },
-
   /* FALLBACK MESSAGE */
   general_exception: { codeNumber: 500 },
 };

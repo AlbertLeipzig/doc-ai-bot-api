@@ -1,5 +1,5 @@
   import { config as _config } from "dotenv";
-import type { ApiConfig } from "./src/types/types.ts";
+import type { ApiConfig } from "./types/types.ts";
 
 _config({ quiet: true });
 
