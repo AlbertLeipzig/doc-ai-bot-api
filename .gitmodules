@@ -7,3 +7,4 @@
 [submodule "types"]
 	path = types
 	url = https://github.com/AlbertLeipzig/doc-ai-bot-types
+	branch = main

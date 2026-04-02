@@ -4,9 +4,11 @@ import { VectorProfile } from "../models/vectorProfileModel.ts";
 import { VectorModel } from "../models/vectorModel.ts";
 import { apiConfig } from "../../apiConfig.ts";
 import { generate } from "../services/generationServices.ts";
-import { url } from "../services/urlServices.ts";
+import { scraper } from "../services/webScraper.ts";
 import { createResponse } from "../utils/createResponse.ts";
-
+import { Types } from "mongoose";
+import { VectorProfileData } from "../../types/types.ts";
+import { profile } from "console";
 /* const _ingestSingleDocument = async (
   req: Request,
   res: Response,
@@ -134,6 +136,8 @@ const _ingestSingleDocument = async (
   return { totalChunks: embeddedDocs.length };
 };
 
+/*  */
+
 export const _ingest = async (
   req: Request,
   res: Response,
@@ -141,95 +145,65 @@ export const _ingest = async (
 ) => {
   try {
     const {
-      _baseUrl,
-      _model,
-      _maxPages,
-      _chunkSize,
-      _chunkOverlap,
-      _vectorProfileId,
+      baseUrl,
+      model,
+      maxPages,
+      chunkSize,
+      chunkOverlap,
+      vectorProfileId,
     } = req.body;
 
-    // 1. Resolve params
-    const model = _model ?? apiConfig.llm.vectorModel;
-    const chunkSize = Number(_chunkSize) || apiConfig.llm.embed.chunking.size;
-    const chunkOverlap =
-      Number(_chunkOverlap) || apiConfig.llm.embed.chunking.overlap;
-    const baseUrl = _baseUrl ?? apiConfig.llm.docs.baseUrl;
-    const maxPages = _maxPages ?? apiConfig.llm.docs.maxPages;
-    const urls = await url.documentation(baseUrl, maxPages);
-    if (!urls?.length)
-      return createResponse({ res, messageCode: "missingUrl" });
+    /* GUARDS */
 
-    // 2. Resolve or create vectorProfile once — shared across all URLs
-    let vectorProfileId = _vectorProfileId ?? null;
+    const _model = model ?? apiConfig.llm.vectorModel;
+    const _chunkSize = Number(chunkSize) || apiConfig.llm.embed.chunking.size;
+    const _chunkOverlap =
+      Number(chunkOverlap) || apiConfig.llm.embed.chunking.overlap;
+    const _baseUrl = baseUrl ?? apiConfig.llm.docs.baseUrl;
+    const _maxPages = maxPages ?? apiConfig.llm.docs.maxPages;
+
+    /* Create VectorProfile if none is provided */
+
+    let _vectorProfileId = vectorProfileId ?? "";
 
     if (!vectorProfileId) {
-      const collectionName = generate.vectorCollectionName({
-        model,
-        chunkSize,
-        chunkOverlap,
+      const vectorProfile = await VectorProfile.create({
+        name: generate.vectorCollectionName({ model, chunkSize, chunkOverlap }),
+        model: _model,
+        chunkSize: _chunkSize,
+        chunkOverlap: _chunkOverlap,
       });
-      const profile = await VectorProfile.create({
-        name: collectionName,
-        model,
-        chunkSize,
-        chunkOverlap,
-      });
-      vectorProfileId = profile._id.toString();
+      if (!vectorProfile) {
+        return createResponse({ res, messageCode: "notRound" });
+      }
+      if (vectorProfile) _vectorProfileId = vectorProfile._id;
     }
 
-    // 3. Process each URL, collect results and errors
-    let totalChunks = 0;
-    const errors: { url: string; error: string }[] = [];
+    /*  */
 
-    for (const url of urls) {
+    const _urls = await scraper.documentation({
+      baseUrl: _baseUrl,
+      maxPages: _maxPages,
+    });
+    if (!_urls?.length)
+      return createResponse({ res, messageCode: "missingUrl" });
+
+    const allDocs = [];
+    for (const url of _urls) {
       try {
-        const result = await _ingestSingleDocument(
-          url,
-          model,
-          chunkSize,
-          chunkOverlap,
-          vectorProfileId,
-        );
-        totalChunks += result.totalChunks;
+        const docs = await ingest.loadFromUrl(url, {
+          model: _model,
+          chunkSize: _chunkSize,
+          chunkOverlap: _chunkOverlap,
+        });
+        allDocs.push(...docs);
       } catch (e) {
-        errors.push({ url, error: e instanceof Error ? e.message : String(e) });
+        next(e);
       }
     }
-    try {
-      await VectorModel.collection.createSearchIndex({
-        name: "vector_index",
-        type: "vectorSearch",
-        definition: {
-          fields: [
-            {
-              type: "vector",
-              path: "embedding",
-              numDimensions: 768,
-              similarity: "cosine",
-            },
-            { type: "filter", path: "vectorProfileId" },
-          ],
-        },
-      });
-    } catch (e) {
-      console.error(e);
-    }
-
-    const status =
-      errors.length > 0 && totalChunks === 0
-        ? 422
-        : errors.length > 0
-          ? 207
-          : 201;
-
-    res.status(status).json({
-      vectorProfileId,
-      totalChunks,
-      totalUrls: urls.length,
-      ...(errors.length ? { errors } : {}),
-    });
+    res.status(201).json(allDocs);
   } catch (e) {
+    console.log(e);
     next(e);
   }
 };

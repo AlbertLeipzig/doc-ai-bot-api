@@ -1,6 +1,6 @@
 import axios from "axios";
 import { apiConfig } from "../../apiConfig.ts";
-import type { EmbedOptions } from "../types/types.ts";
+import type { EmbedOptions } from "../../types/types.ts";
 
 const getEmbeddingModel = (overrideModel?: string): string =>
   typeof overrideModel === "string" && overrideModel.trim()

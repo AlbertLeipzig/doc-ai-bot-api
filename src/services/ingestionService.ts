@@ -3,9 +3,9 @@ import * as cheerio from "cheerio";
 import { RecursiveCharacterTextSplitter } from "@langchain/textsplitters";
 import { apiConfig } from "../../apiConfig.ts";
 import { embed } from "./embeddingService.ts";
-import { url } from "../services/urlServices.ts";
+import { scraper } from "../services/webScraper.ts";
 import { sleep } from "./sleepService.ts";
-import type { DocsConfig, LoadedDoc, EmbeddedDoc } from "../types/types.ts";
+import type { DocsConfig, LoadedDoc, EmbeddedDoc } from "../../types/types.ts";
 import { createResponse } from "../utils/createResponse.ts";
 
 type IngestionOverrides = {
@@ -147,7 +147,7 @@ const loadFromDocumentation = async (
         }
       : {};
 
-  const urls = await url.documentation(baseUrl, maxPages);
+  const urls = await scraper.documentation({baseUrl, maxPages});
 
   const allDocs: LoadedDoc[] = [];
 
