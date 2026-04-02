@@ -6,7 +6,7 @@ import { retrieveService } from "../services/retrieveService.ts";
 import { embed } from "../services/embeddingService.ts";
 import { generate } from "../services/generationServices.ts";
 import { apiConfig } from "../../apiConfig.ts";
-import { AskBody } from "../types/types.ts";
+import { AskBody } from "../../types/types.ts";
 import { createResponse } from "../utils/createResponse.ts";
 
 export const chatController = async (

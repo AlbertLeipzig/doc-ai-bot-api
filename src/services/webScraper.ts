@@ -145,9 +145,11 @@ const discoverByCrawling = async (baseUrl, maxPages) => {
   return discovered;
 };
 
-export const discoverDocumentationUrls = async (baseUrl, maxPages) => {
+export const discoverDocumentationUrls = async ({baseUrl, maxPages}) => {
   const sitemapUrls = await discoverFromSitemap(baseUrl, maxPages);
-
+  console.log(
+    `[url.documentation] sitemap returned ${sitemapUrls.length} urls`,
+  );
   if (sitemapUrls.length > 0) {
     return sitemapUrls;
   }
