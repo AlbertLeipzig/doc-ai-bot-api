@@ -1,5 +1,10 @@
 {
   "compilerOptions": {
+    "paths": {
+      "@doc-types": ["./types/types.ts"],
+      "@services": ["./services/src/index.ts"],
+      "@utils": ["./utils/src/index.ts"]
+    },
     "target": "ES2022",
     "module": "NodeNext",
     "moduleResolution": "NodeNext",
