@@ -1,10 +1,9 @@
-[submodule "types.ts"]
-	path = types.ts
-	url = https://github.com/AlbertLeipzig/doc-ai-bot-types
-[submodule "src/types"]
-	path = src/types
-	url = https://github.com/AlbertLeipzig/doc-ai-bot-types
 [submodule "types"]
 	path = types
 	url = https://github.com/AlbertLeipzig/doc-ai-bot-types
-	branch = main
+[submodule "services"]
+	path = services
+	url = https://github.com/AlbertLeipzig/doc-ai-bot-services
+[submodule "utils"]
+	path = utils
+	url = https://github.com/AlbertLeipzig/doc-ai-bot-utils
