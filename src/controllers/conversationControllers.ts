@@ -1,9 +1,8 @@
 import type { NextFunction, Request, Response } from "express";
-import { Conversation } from "../models/conversationModel.ts";
-import { Message } from "../models/messageModel.ts";
+import { Conversation, Message } from "../models/index.ts";
 import { apiConfig } from "../../apiConfig.ts";
-import { generate } from "../services/generationServices.ts";
-import { createResponse } from "../utils/createResponse.ts";
+import { generate } from "@doc-ai-bot/services";
+import { createResponse } from "@doc-ai-bot/utils";
 
 const _create = async (req: Request, res: Response, next: NextFunction) => {
   try {
@@ -81,7 +80,7 @@ const _getConversationsList = async (
   }
 };
 
-export const conversation = {
+export const conversationController = {
   _create,
   _getConversationsList,
   _read,

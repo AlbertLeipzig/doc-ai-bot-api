@@ -1,13 +1,10 @@
 import type { Request, Response, NextFunction } from "express";
-import { ingest } from "../services/ingestionService.ts";
-import { VectorProfile } from "../models/vectorProfileModel.ts";
-import { VectorModel } from "../models/vectorModel.ts";
+import { ingest, generate, scraper } from "@doc-ai-bot/services";
+import { VectorModel, VectorProfile } from "../models/index.ts";
 import { apiConfig } from "../../apiConfig.ts";
-import { generate } from "../services/generationServices.ts";
-import { scraper } from "../services/webScraper.ts";
-import { createResponse } from "../utils/createResponse.ts";
+import { createResponse } from "@doc-ai-bot/utils";
 import { Types } from "mongoose";
-import { VectorProfileData } from "../../types/types.ts";
+import { VectorProfileData } from "@doc-ai-bot/types";
 import { profile } from "console";
 /* const _ingestSingleDocument = async (
   req: Request,
@@ -138,7 +135,7 @@ const _ingestSingleDocument = async (
 
 /*  */
 
-export const _ingest = async (
+export const ingestionController = async (
   req: Request,
   res: Response,
   next: NextFunction,

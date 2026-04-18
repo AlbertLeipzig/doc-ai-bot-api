@@ -1,7 +1,7 @@
 import type { NextFunction, Request, Response } from "express";
 import mongoose from "mongoose";
-import { appState } from "../services/appStateService.ts";
-import { createResponse } from "../utils/createResponse.ts";
+import { appState } from "@doc-ai-bot/services";
+import { createResponse } from "@doc-ai-bot/utils";
 
 const _health = async (req: Request, res: Response, next: NextFunction) => {
   try {
@@ -48,7 +48,7 @@ const _ready = async (req: Request, res: Response, next: NextFunction) => {
   }
 };
 
-export const health = {
+export const healthController = {
   _health,
   _ready,
 };

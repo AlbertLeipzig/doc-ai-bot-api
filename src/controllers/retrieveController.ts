@@ -1,10 +1,9 @@
 import { Request, Response, NextFunction } from "express";
-import { retrieveService } from "../services/retrieveService.ts";
-import { VectorModel } from "../models/vectorModel.ts";
-import { embed } from "../services/embeddingService.ts";
-import { createResponse } from "../utils/createResponse.ts";
+import { retrieveService, embed } from "@doc-ai-bot/services";
+import { VectorModel } from "../models/index.ts";
+import { createResponse } from "@doc-ai-bot/utils";
 
-export const _retrieve = async (
+export const retrieveController = async (
   req: Request,
   res: Response,
   next: NextFunction,
@@ -12,7 +11,8 @@ export const _retrieve = async (
   try {
     const { query, k, _vectorProfileId } = req.body;
 
-    if (!query) return createResponse({res, messageCode : "retrieve_missingQuery"})
+    if (!query)
+      return createResponse({ res, messageCode: "retrieve_missingQuery" });
 
     const queryEmbedding = await embed.query(query);
     const limit = retrieveService.getTopK(k);

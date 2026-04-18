@@ -1,8 +1,8 @@
 import type { NextFunction, Request, Response } from "express";
-import { VectorModel, getDynamicVectorModel } from "../models/vectorModel.ts";
+import { VectorModel, getDynamicVectorModel } from "../models/index.ts";
 import { isValidObjectId } from "mongoose";
-import { embed } from "../services/embeddingService.ts";
-import { createResponse } from "../utils/createResponse.ts";
+import { embed } from "@doc-ai-bot/services";
+import { createResponse } from "@doc-ai-bot/utils";
 /* import {VectorUpdateData} from "../types/types.ts" */
 
 /* LIKELY TO BE DELETED IN FEW DAYS */
@@ -92,7 +92,7 @@ const _deleteMany = async (req: Request, res: Response, next: NextFunction) => {
   }
 };
 
-export const vector = {
+export const vectorController = {
   _create,
   _read,
   _readMany,

@@ -1,7 +1,7 @@
 import { Router } from "express";
-import { conversation } from "../controllers/conversationControllers.ts";
+import { conversationController } from "../controllers/index.ts";
 
-const { _read, _delete, _deleteMany, _getConversationsList } = conversation;
+const { _read, _delete, _deleteMany, _getConversationsList } = conversationController;
 
 export const conversationRouter = Router();
 

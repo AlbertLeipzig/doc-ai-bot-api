@@ -1,5 +1,5 @@
 import { Schema, model } from "mongoose";
-import { VectorProfileData } from "../../types/types.ts";
+import { VectorProfileData } from "@doc-types";
 const vectorProfileSchema = new Schema<VectorProfileData>(
   {
     name: { type: String, required: true },

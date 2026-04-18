@@ -1,7 +1,7 @@
 import { Router } from "express";
-import { health } from "../controllers/healthControllers.ts";
+import { healthController } from "../controllers/index.ts";
 
-const { _health, _ready } = health;
+const { _health, _ready } = healthController;
 
 export const healthRouter = Router();
 

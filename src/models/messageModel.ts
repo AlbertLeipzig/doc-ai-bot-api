@@ -1,5 +1,5 @@
 import mongoose from "mongoose";
-import { MessageData } from "../../types/types.ts";
+import { MessageData } from "@doc-types";
 
 const { model, Schema } = mongoose;
 

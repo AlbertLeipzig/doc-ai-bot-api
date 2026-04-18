@@ -1,6 +1,6 @@
 import type { NextFunction, Request, Response } from "express";
-import { createResponse } from "../utils/createResponse.ts";
-import { VectorProfile } from "../models/vectorProfileModel.ts";
+import { createResponse } from "@doc-ai-bot/utils";
+import { VectorProfile } from "../models/index.ts";
 
 const _create = async (req: Request, res: Response, next: NextFunction) => {
   try {
@@ -67,7 +67,7 @@ const getVectorProfileList = async (
   }
 };
 
-export const vectorProfile = {
+export const vectorProfileController = {
   _getList: getVectorProfileList,
   _create,
   _delete,

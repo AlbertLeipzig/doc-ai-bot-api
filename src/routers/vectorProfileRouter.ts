@@ -1,7 +1,7 @@
 import { Router } from "express";
-import { vectorProfile } from "../controllers/vectorProfileController.ts";
+import { vectorProfileController } from "../controllers/index.ts";
 
-const { _getList, _delete, _deleteMany, _read } = vectorProfile;
+const { _getList, _delete, _deleteMany, _read } = vectorProfileController;
 
 export const vectorProfileRouter = Router();
 

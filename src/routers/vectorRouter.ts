@@ -1,9 +1,9 @@
 import { Router } from "express";
-import { vector } from "../controllers/vectorControllers.ts";
+import { vectorController } from "../controllers/index.ts";
 
 const {
   _deleteMany,
-} = vector;
+} = vectorController;
 
 export const vectorRouter = Router();
 

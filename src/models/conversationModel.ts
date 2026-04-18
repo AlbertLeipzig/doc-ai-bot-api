@@ -1,5 +1,5 @@
 import mongoose from "mongoose";
-import type { ConversationData } from "../../types/types.ts";
+import type { ConversationData } from "@doc-types";
 
 const { model, Schema } = mongoose;
 

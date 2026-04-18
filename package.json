@@ -4,13 +4,17 @@
   "main": "dist/doc-ai-bot-api/src/server.js",
   "type": "module",
   "scripts": {
-    "build": "tsc",
-    "dev": "tsx watch ./src/server.ts",
     "branch:init": "git push --set-upstream origin $(git branch --show-current)",
     "branch:main": "git switch main && git pull",
     "branch:new": "git checkout -b",
     "branch:sanity": "git add . && git commit -m 'wip' && git push",
-    "update-types": "git config -f .gitmodules submodule.types.branch main && git submodule update --init --recursive --remote"
+    "dev": "vite",
+    "server:dev": "tsx watch ./src/server.ts",
+    "build": "tsc -b && vite build",
+    "submodule:clone": "sh -c 'git submodule update --init $1' --",
+    "submodule:pull": "sh -c 'git config -f .gitmodules submodule.$1.branch main && git submodule update --remote $1' --",
+    "submodule:update": "sh -c 'cd ./src/$1 && git add . && git commit -m \"$2\" && git push' && cd ../.. && git add $1 && git commit -m \"$2\" && git push",
+    "typecheck": "tsc --noEmit -p tsconfig.json"
   },
   "keywords": [],
   "author": "Albert_Fuchs",
@@ -18,6 +22,8 @@
   "description": "",
   "dependencies": {
     "@langchain/textsplitters": "^1.0.1",
+    "@doc-ai-bot/services": "github:AlbertLeipzig/doc-ai-bot-services",
+    "@doc-ai-bot/utils": "github:AlbertLeipzig/doc-ai-bot-utils",
     "axios": "^1.13.5",
     "cheerio": "^1.2.0",
     "cookie-parser": "^1.4.7",
@@ -31,6 +37,7 @@
     "mongoose": "^9.2.1"
   },
   "devDependencies": {
+    "@doc-ai-bot/types": "github:AlbertLeipzig/doc-ai-bot-types",
     "@types/cookie-parser": "^1.4.10",
     "@types/cors": "^2.8.19",
     "@types/express": "^5.0.5",

@@ -1,7 +1,7 @@
 import type { NextFunction, Request, Response } from "express";
-import { Message } from "../models/messageModel.ts";
+import { Message } from "../models/index.ts";
 import { isValidObjectId } from "mongoose";
-import { createResponse } from "../utils/createResponse.ts";
+import { createResponse } from "@doc-ai-bot/utils";
 
 const _create = async (req: Request, res: Response, next: NextFunction) => {
   try {
@@ -86,7 +86,7 @@ const _deleteMany = async (req: Request, res: Response, next: NextFunction) => {
   }
 };
 
-export const message = {
+export const messageController = {
   _create,
   _read,
   _readMany,

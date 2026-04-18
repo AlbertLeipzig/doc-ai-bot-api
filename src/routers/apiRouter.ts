@@ -4,7 +4,7 @@ import { vectorRouter } from "./vectorRouter.ts";
 import { healthRouter } from "./healthRouter.ts";
 import { vectorProfileRouter } from "./vectorProfileRouter.ts";
 import { ragRouter } from "./ragRouter.ts";
-import { chatController } from "../controllers/chatController.ts";
+import { chatController } from "../controllers/index.ts";
 import { authRouter } from "./authRouter.ts";
 
 export const apiRouter = Router();
