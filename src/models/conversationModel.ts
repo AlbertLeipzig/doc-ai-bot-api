@@ -1,5 +1,5 @@
 import mongoose from "mongoose";
-import type { ConversationData } from "@doc-types";
+import type { ConversationData } from "@doc-ai-bot/types";
 
 const { model, Schema } = mongoose;
 

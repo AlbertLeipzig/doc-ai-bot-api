@@ -1,7 +1,7 @@
 import { NextFunction, Request, Response } from "express";
 import { apiConfig } from "../../apiConfig.ts";
 
-import type { RawError } from "@doc-types";
+import type { RawError } from "@doc-ai-bot/types";
 
 // PENDING: add message, retryable flag, or domain-specific codes per entry.
 // Currently maps known codes explicitly, defaulting unknown to 500.
