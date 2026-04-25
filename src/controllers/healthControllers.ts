@@ -1,6 +1,6 @@
 import type { NextFunction, Request, Response } from "express";
 import mongoose from "mongoose";
-import { appState } from "@doc-ai-bot/services";
+import { apiStateService } from "@doc-ai-bot/services";
 import { createResponse } from "@doc-ai-bot/utils";
 
 const _health = async (req: Request, res: Response, next: NextFunction) => {
@@ -13,7 +13,7 @@ const _health = async (req: Request, res: Response, next: NextFunction) => {
 
 const _ready = async (req: Request, res: Response, next: NextFunction) => {
   try {
-    if (appState.isShuttingDown()) {
+    if (apiStateService.isShuttingDown()) {
       createResponse({
         res,
         data: {

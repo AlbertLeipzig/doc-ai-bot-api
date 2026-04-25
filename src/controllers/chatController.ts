@@ -1,6 +1,6 @@
 import type { Request, Response, NextFunction } from "express";
 import { VectorModel, Message, Conversation } from "../models/index.ts";
-import { retrieveService, embed, generate } from "@doc-ai-bot/services";
+import { retriever, embedder, generator } from "@doc-ai-bot/services";
 import { apiConfig } from "../../apiConfig.ts";
 import { AskBody } from "@doc-ai-bot/types";
 import { createResponse } from "@doc-ai-bot/utils";
@@ -55,17 +55,17 @@ export const chatController = async (
     });
 
     // 4. Retrieve relevant chunks
-    const queryEmbedding = await embed.query(question);
-    const pipeline = retrieveService.buildVectorSearchPipeline({
+    const queryEmbedding = await embeder.query(question);
+    const pipeline = retriever.buildVectorSearchPipeline({
       queryEmbedding,
       vectorProfileId,
       k: topK,
     });
     const chunks = await VectorModel.collection.aggregate(pipeline).toArray();
-    const context = retrieveService.buildContext(chunks);
+    const context = retriever.buildContext(chunks);
 
     // 5. Generate answer
-    const { content: answer } = await generate.llmResponse([
+    const { content: answer } = await generator.llmResponse([
       { role: "system", content: `Answer using this context:\n\n${context}` },
       { role: "user", content: question },
     ]);

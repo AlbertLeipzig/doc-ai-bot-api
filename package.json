@@ -2,7 +2,6 @@
   "name": "doc-ai-bot-api",
   "version": "1.0.0",
   "main": "dist/doc-ai-bot-api/src/server.js",
-  "type": "module",
   "scripts": {
     "branch:init": "git push --set-upstream origin $(git branch --show-current)",
     "branch:main": "git switch main && git pull",
@@ -21,9 +20,11 @@
   "license": "ISC",
   "description": "",
   "dependencies": {
-    "@langchain/textsplitters": "^1.0.1",
+    "@doc-ai-bot/infrastructure": "github:AlbertLeipzig/doc-ai-bot-infrastructure",
+    "@doc-ai-bot/middlewares": "github:AlbertLeipzig/doc-ai-bot-middlewares",
     "@doc-ai-bot/services": "github:AlbertLeipzig/doc-ai-bot-services",
     "@doc-ai-bot/utils": "github:AlbertLeipzig/doc-ai-bot-utils",
+    "@langchain/textsplitters": "^1.0.1",
     "axios": "^1.13.5",
     "cheerio": "^1.2.0",
     "cookie-parser": "^1.4.7",

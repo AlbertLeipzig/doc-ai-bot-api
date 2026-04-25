@@ -1,5 +1,5 @@
 import type { Request, Response, NextFunction } from "express";
-import { ingest, generate, scraper } from "@doc-ai-bot/services";
+import { ingester, generator, scraper } from "@doc-ai-bot/services";
 import { VectorModel, VectorProfile } from "../models/index.ts";
 import { apiConfig } from "../../apiConfig.ts";
 import { createResponse } from "@doc-ai-bot/utils";
@@ -107,7 +107,7 @@ const _ingestSingleDocument = async (
   chunkOverlap: number,
   vectorProfileId: string,
 ): Promise<{ totalChunks: number }> => {
-  const loadedDocs = await ingest.loadFromUrl(baseUrl, {
+  const loadedDocs = await ingester.loadFromUrl(baseUrl, {
     chunkSize,
     chunkOverlap,
     model,
@@ -116,7 +116,7 @@ const _ingestSingleDocument = async (
   if (!loadedDocs.length)
     throw new Error(`No content extracted from ${baseUrl}`);
 
-  const embeddedDocs = await ingest.ingestDocuments(loadedDocs, {
+  const embeddedDocs = await ingester.ingestDocuments(loadedDocs, {
     model,
     chunkSize,
     chunkOverlap,
@@ -165,7 +165,7 @@ export const ingestionController = async (
 
     if (!vectorProfileId) {
       const vectorProfile = await VectorProfile.create({
-        name: generate.vectorCollectionName({ model, chunkSize, chunkOverlap }),
+        name: generator.vectorCollectionName({ model, chunkSize, chunkOverlap }),
         model: _model,
         chunkSize: _chunkSize,
         chunkOverlap: _chunkOverlap,
@@ -188,7 +188,7 @@ export const ingestionController = async (
     const allDocs = [];
     for (const url of _urls) {
       try {
-        const docs = await ingest.loadFromUrl(url, {
+        const docs = await ingester.loadFromUrl(url, {
           model: _model,
           chunkSize: _chunkSize,
           chunkOverlap: _chunkOverlap,

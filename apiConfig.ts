@@ -1,5 +1,5 @@
-  import { config as _config } from "dotenv";
-import type { ApiConfig } from "@doc-types";
+import { config as _config } from "dotenv";
+import type { ApiConfig } from "@doc-ai-bot/types";
 
 _config({ quiet: true });
 

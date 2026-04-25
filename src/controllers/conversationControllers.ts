@@ -1,14 +1,14 @@
 import type { NextFunction, Request, Response } from "express";
 import { Conversation, Message } from "../models/index.ts";
 import { apiConfig } from "../../apiConfig.ts";
-import { generate } from "@doc-ai-bot/services";
+import { generator } from "@doc-ai-bot/services";
 import { createResponse } from "@doc-ai-bot/utils";
 
 const _create = async (req: Request, res: Response, next: NextFunction) => {
   try {
     const { vectorProfileId, topK: rawTopK, content } = req.body;
 
-    const title = await generate.conversationTitle(content);
+    const title = await generator.conversationTitle(content);
 
     const topK = rawTopK ?? apiConfig.llm.retrieve.topK;
 

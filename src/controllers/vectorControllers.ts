@@ -1,7 +1,7 @@
 import type { NextFunction, Request, Response } from "express";
 import { VectorModel, getDynamicVectorModel } from "../models/index.ts";
 import { isValidObjectId } from "mongoose";
-import { embed } from "@doc-ai-bot/services";
+import { embedder } from "@doc-ai-bot/services";
 import { createResponse } from "@doc-ai-bot/utils";
 /* import {VectorUpdateData} from "../types/types.ts" */
 
@@ -14,7 +14,7 @@ const _create = async (req: Request, res: Response, next: NextFunction) => {
     if (!content)
       return createResponse({ res, messageCode: "missingContent" });
 
-    const embedding = await embed.query(content);
+    const embedding = await embedder.query(content);
 
     await VectorModel.create({
       content,

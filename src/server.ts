@@ -2,12 +2,13 @@ import express from "express";
 import cors from "cors";
 import mongoose from "mongoose";
 import { apiConfig } from "../apiConfig.ts";
-import { connectToDb, startServer, appState } from "@doc-ai-bot/services";
+import { dbService, starter, apiStateService } from "@doc-ai-bot/services";
 import { apiRouter } from "./routers/apiRouter.ts";
-import { errorHandlingMiddleware } from "./middlewares/errorHandlingMiddleware.ts";
-import { rateLimitingMiddleware } from "./middlewares/rateLimitingMiddleware.ts";
-import { authMiddleware } from "./middlewares/authMiddleware.ts";
+import { errorHandlingMiddleware, rateLimitingMiddleware, authMiddleware } from "@doc-ai-bot/middlewares";
 import cookieParser from "cookie-parser";
+
+const {port, mode} = apiConfig.server
+
 const app = express();
 
 app.use(cors(apiConfig.server.cors));
@@ -27,7 +28,7 @@ const setupGracefulShutdown = (server) => {
     }
 
     isShuttingDown = true;
-    appState.setShuttingDown(true);
+    apiStateService.setShuttingDown(true);
     console.log(`Received ${signal}. Starting graceful shutdown...`);
 
     const forceExitTimer = setTimeout(() => {
@@ -68,10 +69,11 @@ const setupGracefulShutdown = (server) => {
   });
 };
 
-connectToDb()
+dbService
+  .connect(apiConfig.db.uri)
   .then(() => {
     console.clear();
-    const server = startServer(app);
+    const server = starter({app, port, mode});
     setupGracefulShutdown(server);
   })
   .catch((e) => {

@@ -1,5 +1,5 @@
 import { Request, Response, NextFunction } from "express";
-import { retrieveService, embed } from "@doc-ai-bot/services";
+import { retriever, embedder } from "@doc-ai-bot/services";
 import { VectorModel } from "../models/index.ts";
 import { createResponse } from "@doc-ai-bot/utils";
 
@@ -14,8 +14,8 @@ export const retrieveController = async (
     if (!query)
       return createResponse({ res, messageCode: "retrieve_missingQuery" });
 
-    const queryEmbedding = await embed.query(query);
-    const limit = retrieveService.getTopK(k);
+    const queryEmbedding = await embedder.query(query);
+    const limit = retriever.topK(k);
 
     const totalDocs = await VectorModel.countDocuments(
       _vectorProfileId ? { vectorProfileId: _vectorProfileId } : {},
@@ -27,11 +27,12 @@ export const retrieveController = async (
     let results = [];
 
     try {
-      const pipeline = retrieveService.buildVectorSearchPipeline({
+      const pipeline = retriever.buildVectorSearchPipeline({
         queryEmbedding,
         k: limit,
         vectorProfileId: _vectorProfileId,
       });
+
       results = await VectorModel.collection.aggregate(pipeline).toArray();
     } catch (vectorError) {
       console.warn(

@@ -1,6 +1,6 @@
 import type { Request, Response, NextFunction } from "express";
 import jwt from "jsonwebtoken";
-import { apiConfig } from "../../apiConfig.ts";
+import { apiConfig } from "@doc-ai-bot/infrastructure";
 import { createResponse } from "@doc-ai-bot/utils";
 const { cookieOptions } = apiConfig.server;
 
@@ -59,3 +59,4 @@ const _verify = (req: Request, res: Response) => {
 };
 
 export const authController = { _login, _logout, _verify };
+
