@@ -7,7 +7,6 @@
     "branch:main": "git switch main && git pull",
     "branch:new": "git checkout -b",
     "branch:sanity": "git add . && git commit -m 'wip' && git push",
-    "dev": "vite",
     "server:dev": "tsx watch ./src/server.ts",
     "build": "tsc -b && vite build",
     "submodule:clone": "sh -c 'git submodule update --init $1' --",
