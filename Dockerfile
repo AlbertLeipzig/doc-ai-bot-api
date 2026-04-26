@@ -4,6 +4,7 @@ WORKDIR /app
 
 COPY package*.json ./
 RUN npm ci
+RUN apt-get update && apt-get install -y git && rm -rf /var/lib/apt/lists/*
 
 COPY tsconfig*.json ./
 COPY src/ ./src/

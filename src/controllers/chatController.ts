@@ -55,7 +55,7 @@ export const chatController = async (
     });
 
     // 4. Retrieve relevant chunks
-    const queryEmbedding = await embeder.query(question);
+    const queryEmbedding = await embedder.query(question);
     const pipeline = retriever.buildVectorSearchPipeline({
       queryEmbedding,
       vectorProfileId,
