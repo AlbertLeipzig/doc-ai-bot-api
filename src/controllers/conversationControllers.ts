@@ -1,6 +1,6 @@
 import type { NextFunction, Request, Response } from "express";
 import { Conversation, Message } from "../models/index.ts";
-import { apiConfig } from "../../apiConfig.ts";
+import { apiConfig } from "@doc-ai-bot/infrastructure";
 import { generator } from "@doc-ai-bot/services";
 import { createResponse } from "@doc-ai-bot/utils";
 

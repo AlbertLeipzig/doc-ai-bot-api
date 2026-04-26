@@ -1,6 +1,6 @@
 import mongoose from "mongoose";
 import type { Model } from "mongoose";
-import { apiConfig } from "../../apiConfig.ts";
+import { apiConfig } from "@doc-ai-bot/infrastructure";
 import type { VectorData } from "@doc-ai-bot/types";
 
 const { model, Schema, models } = mongoose;

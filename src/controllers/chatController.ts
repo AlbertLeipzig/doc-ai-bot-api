@@ -1,7 +1,7 @@
 import type { Request, Response, NextFunction } from "express";
 import { VectorModel, Message, Conversation } from "../models/index.ts";
 import { retriever, embedder, generator } from "@doc-ai-bot/services";
-import { apiConfig } from "../../apiConfig.ts";
+import { apiConfig } from "@doc-ai-bot/infrastructure";
 import { AskBody } from "@doc-ai-bot/types";
 import { createResponse } from "@doc-ai-bot/utils";
 

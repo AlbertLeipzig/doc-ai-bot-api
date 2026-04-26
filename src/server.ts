@@ -1,13 +1,17 @@
 import express from "express";
 import cors from "cors";
 import mongoose from "mongoose";
-import { apiConfig } from "../apiConfig.ts";
+import { apiConfig } from "@doc-ai-bot/infrastructure";
 import { dbService, starter, apiStateService } from "@doc-ai-bot/services";
 import { apiRouter } from "./routers/apiRouter.ts";
-import { errorHandlingMiddleware, rateLimitingMiddleware, authMiddleware } from "@doc-ai-bot/middlewares";
+import {
+  errorHandlingMiddleware,
+  rateLimitingMiddleware,
+  authMiddleware,
+} from "@doc-ai-bot/middlewares";
 import cookieParser from "cookie-parser";
 
-const {port, mode} = apiConfig.server
+const { port, mode } = apiConfig.server;
 
 const app = express();
 
@@ -73,7 +77,7 @@ dbService
   .connect(apiConfig.db.uri)
   .then(() => {
     console.clear();
-    const server = starter({app, port, mode});
+    const server = starter({ app, port, mode });
     setupGracefulShutdown(server);
   })
   .catch((e) => {

@@ -1,7 +1,7 @@
 import type { Request, Response, NextFunction } from "express";
 import { ingester, generator, scraper } from "@doc-ai-bot/services";
 import { VectorModel, VectorProfile } from "../models/index.ts";
-import { apiConfig } from "../../apiConfig.ts";
+import { apiConfig } from "@doc-ai-bot/infrastructure";
 import { createResponse } from "@doc-ai-bot/utils";
 import { Types } from "mongoose";
 import { VectorProfileData } from "@doc-ai-bot/types";
