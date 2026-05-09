@@ -1,14 +1,14 @@
 import express from "express";
 import cors from "cors";
 import mongoose from "mongoose";
-import { apiConfig } from "@doc-ai-bot/infrastructure";
-import { dbService, starter, apiStateService } from "@doc-ai-bot/services";
+import { apiConfig } from "@albertleipzig/doc-ai-bot-infrastructure";
+import { dbService, starter, apiStateService } from "@albertleipzig/doc-ai-bot-services";
 import { apiRouter } from "./routers/apiRouter.ts";
 import {
   errorHandlingMiddleware,
   rateLimitingMiddleware,
   authMiddleware,
-} from "@doc-ai-bot/middlewares";
+} from "@albertleipzig/doc-ai-bot-middlewares";
 import cookieParser from "cookie-parser";
 
 const { port, mode } = apiConfig.server;

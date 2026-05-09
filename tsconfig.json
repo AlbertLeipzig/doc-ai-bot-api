@@ -11,8 +11,9 @@
     "esModuleInterop": true,
     "forceConsistentCasingInFileNames": true,
     "resolveJsonModule": true,
-    "composite": false
+    "composite": false,
+    "verbatimModuleSyntax": true
   },
   "include": ["src/**/*.ts", "types/**/*.ts", "apiConfig.ts"],
-  "exclude": ["dist", "node_modules"]
+  "exclude": ["dist", "node_modules", "**/*.test.ts"]
 }

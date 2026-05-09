@@ -1,9 +1,9 @@
 import type { Request, Response, NextFunction } from "express";
 import { VectorModel, Message, Conversation } from "../models/index.ts";
-import { retriever, embedder, generator } from "@doc-ai-bot/services";
-import { apiConfig } from "@doc-ai-bot/infrastructure";
-import { AskBody } from "@doc-ai-bot/types";
-import { createResponse } from "@doc-ai-bot/utils";
+import { retriever, embedder, generator } from "@albertleipzig/doc-ai-bot-services";
+import { apiConfig } from "@albertleipzig/doc-ai-bot-infrastructure";
+import { AskBody } from "@albertleipzig/doc-ai-bot-types";
+import { createResponse } from "@albertleipzig/doc-ai-bot-utils";
 
 export const chatController = async (
   req: Request,

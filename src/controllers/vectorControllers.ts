@@ -1,8 +1,8 @@
 import type { NextFunction, Request, Response } from "express";
 import { VectorModel, getDynamicVectorModel } from "../models/index.ts";
 import { isValidObjectId } from "mongoose";
-import { embedder } from "@doc-ai-bot/services";
-import { createResponse } from "@doc-ai-bot/utils";
+import { embedder } from "@albertleipzig/doc-ai-bot-services";
+import { createResponse } from "@albertleipzig/doc-ai-bot-utils";
 /* import {VectorUpdateData} from "../types/types.ts" */
 
 /* LIKELY TO BE DELETED IN FEW DAYS */

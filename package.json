@@ -1,5 +1,5 @@
 {
-  "name": "doc-ai-bot-api",
+  "name": "@albertleipzig/doc-ai-bot-api",
   "version": "1.0.0",
   "main": "dist/doc-ai-bot-api/src/server.js",
   "scripts": {
@@ -8,7 +8,7 @@
     "branch:new": "git checkout -b",
     "branch:sanity": "git add . && git commit -m 'wip' && git push",
     "server:dev": "tsx watch ./src/server.ts",
-    "build": "tsc -b && vite build",
+    "build": "tsc -b",
     "submodule:clone": "sh -c 'git submodule update --init $1' --",
     "submodule:pull": "sh -c 'git config -f .gitmodules submodule.$1.branch main && git submodule update --remote $1' --",
     "submodule:update": "sh -c 'cd ./src/$1 && git add . && git commit -m \"$2\" && git push' && cd ../.. && git add $1 && git commit -m \"$2\" && git push",
@@ -19,10 +19,10 @@
   "license": "ISC",
   "description": "",
   "dependencies": {
-    "@doc-ai-bot/infrastructure": "github:AlbertLeipzig/doc-ai-bot-infrastructure",
-    "@doc-ai-bot/middlewares": "github:AlbertLeipzig/doc-ai-bot-middlewares",
-    "@doc-ai-bot/services": "github:AlbertLeipzig/doc-ai-bot-services",
-    "@doc-ai-bot/utils": "github:AlbertLeipzig/doc-ai-bot-utils",
+    "@albertleipzig/doc-ai-bot-infrastructure": "^1.0.2",
+    "@albertleipzig/doc-ai-bot-middlewares": "^1.0.3",
+    "@albertleipzig/doc-ai-bot-services": "^1.0.2",
+    "@albertleipzig/doc-ai-bot-utils": "^1.0.7",
     "@langchain/textsplitters": "^1.0.1",
     "axios": "^1.13.5",
     "cheerio": "^1.2.0",
@@ -37,7 +37,7 @@
     "mongoose": "^9.2.1"
   },
   "devDependencies": {
-    "@doc-ai-bot/types": "github:AlbertLeipzig/doc-ai-bot-types",
+    "@albertleipzig/doc-ai-bot-types": "^1.0.0",
     "@types/cookie-parser": "^1.4.10",
     "@types/cors": "^2.8.19",
     "@types/express": "^5.0.5",

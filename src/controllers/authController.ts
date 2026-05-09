@@ -1,7 +1,7 @@
 import type { Request, Response, NextFunction } from "express";
 import jwt from "jsonwebtoken";
-import { apiConfig } from "@doc-ai-bot/infrastructure";
-import { createResponse } from "@doc-ai-bot/utils";
+import { apiConfig } from "@albertleipzig/doc-ai-bot-infrastructure";
+import { createResponse } from "@albertleipzig/doc-ai-bot-utils";
 const { cookieOptions } = apiConfig.server;
 
 const _login = async (req: Request, res: Response, next: NextFunction) => {
