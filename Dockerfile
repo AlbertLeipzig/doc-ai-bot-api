@@ -5,5 +5,4 @@ COPY package*.json ./
 ARG GITHUB_TOKEN
 RUN npm ci
 COPY . .
-RUN npm run build
-CMD ["node", "dist/doc-ai-bot-api/src/server.js"]
+CMD ["npx", "tsx", "src/server.ts"]
