@@ -1,5 +1,5 @@
 import type { NextFunction, Request, Response } from "express";
-import { createResponse } from "@doc-ai-bot/utils";
+import { createResponse } from "@albertleipzig/doc-ai-bot-utils";
 import { VectorProfile } from "../models/index.ts";
 
 const _create = async (req: Request, res: Response, next: NextFunction) => {

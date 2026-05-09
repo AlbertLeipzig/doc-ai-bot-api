@@ -1,8 +1,8 @@
 import type { NextFunction, Request, Response } from "express";
 import { Conversation, Message } from "../models/index.ts";
-import { apiConfig } from "@doc-ai-bot/infrastructure";
-import { generator } from "@doc-ai-bot/services";
-import { createResponse } from "@doc-ai-bot/utils";
+import { apiConfig } from "@albertleipzig/doc-ai-bot-infrastructure";
+import { generator } from "@albertleipzig/doc-ai-bot-services";
+import { createResponse } from "@albertleipzig/doc-ai-bot-utils";
 
 const _create = async (req: Request, res: Response, next: NextFunction) => {
   try {

@@ -1,7 +1,7 @@
 import { Request, Response, NextFunction } from "express";
-import { retriever, embedder } from "@doc-ai-bot/services";
+import { retriever, embedder } from "@albertleipzig/doc-ai-bot-services";
 import { VectorModel } from "../models/index.ts";
-import { createResponse } from "@doc-ai-bot/utils";
+import { createResponse } from "@albertleipzig/doc-ai-bot-utils";
 
 export const retrieveController = async (
   req: Request,

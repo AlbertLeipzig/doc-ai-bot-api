@@ -1,7 +1,7 @@
 import type { NextFunction, Request, Response } from "express";
 import mongoose from "mongoose";
-import { apiStateService } from "@doc-ai-bot/services";
-import { createResponse } from "@doc-ai-bot/utils";
+import { apiStateService } from "@albertleipzig/doc-ai-bot-services";
+import { createResponse } from "@albertleipzig/doc-ai-bot-utils";
 
 const _health = async (req: Request, res: Response, next: NextFunction) => {
   try {

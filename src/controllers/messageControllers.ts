@@ -1,7 +1,7 @@
 import type { NextFunction, Request, Response } from "express";
 import { Message } from "../models/index.ts";
 import { isValidObjectId } from "mongoose";
-import { createResponse } from "@doc-ai-bot/utils";
+import { createResponse } from "@albertleipzig/doc-ai-bot-utils";
 
 const _create = async (req: Request, res: Response, next: NextFunction) => {
   try {

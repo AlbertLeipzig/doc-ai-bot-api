@@ -1,18 +1,9 @@
-FROM node:20-alpine
-
+FROM node:20.20.2-alpine
 WORKDIR /app
-
+COPY .npmrc ./
 COPY package*.json ./
+ARG GITHUB_TOKEN
 RUN npm ci
-RUN apt-get update && apt-get install -y git && rm -rf /var/lib/apt/lists/*
-
-COPY tsconfig*.json ./
-COPY src/ ./src/
-COPY apiConfig.ts ./
-COPY types/ ./types/
-
+COPY . .
 RUN npm run build
-
-EXPOSE 7777
-
-CMD ["node", "dist/src/server.js"]
+CMD ["node", "dist/doc-ai-bot-api/src/server.js"]
