@@ -1,4 +1,4 @@
-import { Request, Response, NextFunction } from "express";
+import type { Request, Response, NextFunction } from "express";
 import { retriever, embedder } from "@albertleipzig/doc-ai-bot-services";
 import { VectorModel } from "../models/index.ts";
 import { createResponse } from "@albertleipzig/doc-ai-bot-utils";

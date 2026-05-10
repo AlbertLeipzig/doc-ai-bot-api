@@ -1,5 +1,5 @@
 import { Schema, model } from "mongoose";
-import { VectorProfileData } from "@albertleipzig/doc-ai-bot-types";
+import type { VectorProfileData } from "@albertleipzig/doc-ai-bot-types";
 const vectorProfileSchema = new Schema<VectorProfileData>(
   {
     name: { type: String, required: true },
