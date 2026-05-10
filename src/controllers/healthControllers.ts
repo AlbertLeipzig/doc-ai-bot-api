@@ -2,10 +2,11 @@ import type { NextFunction, Request, Response } from "express";
 import mongoose from "mongoose";
 import { apiStateService } from "@albertleipzig/doc-ai-bot-services";
 import { createResponse } from "@albertleipzig/doc-ai-bot-utils";
+import { ESystemMessage } from "@albertleipzig/doc-ai-bot-types";
 
 const _health = async (req: Request, res: Response, next: NextFunction) => {
   try {
-    createResponse({ res, messageCode: "health" });
+    createResponse({ res, messageCode: ESystemMessage.HEALTHY });
   } catch (e) {
     next(e);
   }
@@ -41,7 +42,7 @@ const _ready = async (req: Request, res: Response, next: NextFunction) => {
       return;
     }
 
-    createResponse({ res, messageCode: "ready" });
+    createResponse({ res, messageCode: ESystemMessage.HEALTHY });
     return;
   } catch (e) {
     next(e);
