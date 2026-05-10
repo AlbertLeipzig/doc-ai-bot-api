@@ -4,7 +4,7 @@ import { VectorModel, VectorProfile } from "../models/index.ts";
 import { apiConfig } from "@albertleipzig/doc-ai-bot-infrastructure";
 import { createResponse } from "@albertleipzig/doc-ai-bot-utils";
 import { Types } from "mongoose";
-import { VectorProfileData } from "@albertleipzig/doc-ai-bot-types";
+import type { VectorProfileData } from "@albertleipzig/doc-ai-bot-types";
 import { profile } from "console";
 /* const _ingestSingleDocument = async (
   req: Request,
