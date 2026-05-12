@@ -4,7 +4,7 @@ import { retriever, embedder, generator } from "@albertleipzig/doc-ai-bot-servic
 import { apiConfig } from "@albertleipzig/doc-ai-bot-infrastructure";
 import type { AskBody } from "@albertleipzig/doc-ai-bot-types";
 import { createResponse } from "@albertleipzig/doc-ai-bot-utils";
-
+import { ESystemMessage } from "@albertleipzig/doc-ai-bot-types";
 export const chatController = async (
   req: Request,
   res: Response,
@@ -22,7 +22,7 @@ export const chatController = async (
     if (!question || !vectorProfileId)
       return createResponse({
         res,
-        messageCode: "missingContent",
+        messageCode: ESystemMessage.REQUEST_MISSING_DATA,
         data: { message: "missing question and / or vector profile id" },
       });
 
@@ -36,7 +36,7 @@ export const chatController = async (
       if (!existing)
         return createResponse({
           res,
-          messageCode: "notFound",
+          messageCode: ESystemMessage.NOT_FOUND,
           data: { error: `conversation ${resolvedConversationId} not found` },
         });
     } else {
@@ -80,7 +80,7 @@ export const chatController = async (
     // 7. Respond
     createResponse({
       res,
-      messageCode: "create",
+      messageCode: ESystemMessage.CREATE_SUCCESS,
       data: { conversationId: resolvedConversationId, answer },
     });
   } catch (e) {

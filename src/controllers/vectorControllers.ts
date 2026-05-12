@@ -3,6 +3,7 @@ import { VectorModel, getDynamicVectorModel } from "../models/index.ts";
 import { isValidObjectId } from "mongoose";
 import { embedder } from "@albertleipzig/doc-ai-bot-services";
 import { createResponse } from "@albertleipzig/doc-ai-bot-utils";
+import { ESystemMessage } from "@albertleipzig/doc-ai-bot-types";
 /* import {VectorUpdateData} from "../types/types.ts" */
 
 /* LIKELY TO BE DELETED IN FEW DAYS */
@@ -12,7 +13,10 @@ const _create = async (req: Request, res: Response, next: NextFunction) => {
     const { content, metadata } = req.body;
 
     if (!content)
-      return createResponse({ res, messageCode: "missingContent" });
+      return createResponse({
+        res,
+        messageCode: ESystemMessage.REQUEST_MISSING_DATA,
+      });
 
     const embedding = await embedder.query(content);
 
@@ -21,7 +25,7 @@ const _create = async (req: Request, res: Response, next: NextFunction) => {
       embedding,
     });
 
-    createResponse({ res, messageCode: "create" });
+    createResponse({ res, messageCode: ESystemMessage.CREATE_SUCCESS });
   } catch (e) {
     next(e);
   }
@@ -41,7 +45,7 @@ const _createMany = async (req: Request, res: Response, next: NextFunction) => {
 
     const DynamicVectorModel = getDynamicVectorModel(collectionName);
     await DynamicVectorModel.create(vectors);
-    createResponse({ res, messageCode: "create" });
+    createResponse({ res, messageCode: ESystemMessage.CREATE_SUCCESS });
   } catch (e) {
     next(e);
   }
@@ -50,11 +54,18 @@ const _createMany = async (req: Request, res: Response, next: NextFunction) => {
 const _read = async (req: Request, res: Response, next: NextFunction) => {
   try {
     if (!isValidObjectId(req.params.id))
-      return createResponse({ res, messageCode: "invalidId" });
+      return createResponse({
+        res,
+        messageCode: ESystemMessage.GENERAL_EXCEPTION,
+      });
     const vector = await VectorModel.findById(req.params.id);
     vector
-      ? createResponse({ res, messageCode: "get", data: vector })
-      : createResponse({ res, messageCode: "notFound" });
+      ? createResponse({
+          res,
+          messageCode: ESystemMessage.READ_SUCCESS,
+          data: vector,
+        })
+      : createResponse({ res, messageCode: ESystemMessage.NOT_FOUND });
   } catch (e) {
     next(e);
   }
@@ -64,8 +75,12 @@ const _readMany = async (req: Request, res: Response, next: NextFunction) => {
   try {
     const vectors = await VectorModel.find();
     vectors
-      ? createResponse({ res, messageCode: "get", data: vectors })
-      : createResponse({ res, messageCode: "notFound" });
+      ? createResponse({
+          res,
+          messageCode: ESystemMessage.READ_SUCCESS,
+          data: vectors,
+        })
+      : createResponse({ res, messageCode: ESystemMessage.READ_EMPTY_LIST });
   } catch (e) {
     next(e);
   }
@@ -74,7 +89,10 @@ const _readMany = async (req: Request, res: Response, next: NextFunction) => {
 const _delete = async (req: Request, res: Response, next: NextFunction) => {
   try {
     if (!isValidObjectId(req.params.id))
-      return createResponse({ res, messageCode: "invalidId" });
+      return createResponse({
+        res,
+        messageCode: ESystemMessage.GENERAL_EXCEPTION,
+      });
 
     const vector = await VectorModel.findByIdAndDelete(req.params.id);
     vector ? res.status(200).json(vector) : res.sendStatus(404);
@@ -86,7 +104,7 @@ const _delete = async (req: Request, res: Response, next: NextFunction) => {
 const _deleteMany = async (req: Request, res: Response, next: NextFunction) => {
   try {
     await VectorModel.deleteMany();
-    createResponse({ res, messageCode: "delete" });
+    createResponse({ res, messageCode: ESystemMessage.DELETE_SUCCESS });
   } catch (e) {
     next(e);
   }

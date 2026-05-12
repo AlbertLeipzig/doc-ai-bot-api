@@ -4,7 +4,7 @@ import { VectorModel, VectorProfile } from "../models/index.ts";
 import { apiConfig } from "@albertleipzig/doc-ai-bot-infrastructure";
 import { createResponse } from "@albertleipzig/doc-ai-bot-utils";
 import { Types } from "mongoose";
-import type { VectorProfileData } from "@albertleipzig/doc-ai-bot-types";
+import { ESystemMessage, type VectorProfileData } from "@albertleipzig/doc-ai-bot-types";
 import { profile } from "console";
 /* const _ingestSingleDocument = async (
   req: Request,
@@ -171,7 +171,7 @@ export const ingestionController = async (
         chunkOverlap: _chunkOverlap,
       });
       if (!vectorProfile) {
-        return createResponse({ res, messageCode: "notRound" });
+        return createResponse({ res, messageCode: ESystemMessage.NOT_FOUND });
       }
       if (vectorProfile) _vectorProfileId = vectorProfile._id;
     }
@@ -183,7 +183,7 @@ export const ingestionController = async (
       maxPages: _maxPages,
     });
     if (!_urls?.length)
-      return createResponse({ res, messageCode: "missingUrl" });
+      return createResponse({ res, messageCode: ESystemMessage.REQUEST_MISSING_DATA });
 
     const allDocs = [];
     for (const url of _urls) {

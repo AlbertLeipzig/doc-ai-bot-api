@@ -2,6 +2,7 @@ import type { Request, Response, NextFunction } from "express";
 import { retriever, embedder } from "@albertleipzig/doc-ai-bot-services";
 import { VectorModel } from "../models/index.ts";
 import { createResponse } from "@albertleipzig/doc-ai-bot-utils";
+import { ESystemMessage } from "@albertleipzig/doc-ai-bot-types";
 
 export const retrieveController = async (
   req: Request,
@@ -12,7 +13,7 @@ export const retrieveController = async (
     const { query, k, _vectorProfileId } = req.body;
 
     if (!query)
-      return createResponse({ res, messageCode: "retrieve_missingQuery" });
+      return createResponse({ res, messageCode: ESystemMessage.REQUEST_MISSING_DATA });
 
     const queryEmbedding = await embedder.query(query);
     const limit = retriever.topK(k);
