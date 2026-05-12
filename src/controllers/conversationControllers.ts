@@ -3,6 +3,8 @@ import { Conversation, Message } from "../models/index.ts";
 import { apiConfig } from "@albertleipzig/doc-ai-bot-infrastructure";
 import { generator } from "@albertleipzig/doc-ai-bot-services";
 import { createResponse } from "@albertleipzig/doc-ai-bot-utils";
+import { ESystemMessage } from "@albertleipzig/doc-ai-bot-types";
+import mongoose from "mongoose";
 
 const _create = async (req: Request, res: Response, next: NextFunction) => {
   try {
@@ -17,7 +19,7 @@ const _create = async (req: Request, res: Response, next: NextFunction) => {
       vectorProfileId,
       topK,
     });
-    createResponse({ res, messageCode: "create" });
+    createResponse({ res, messageCode: ESystemMessage.CREATE_SUCCESS });
   } catch (e) {
     next(e);
   }
@@ -27,7 +29,7 @@ const _read = async (req: Request, res: Response, next: NextFunction) => {
   try {
     const conversation = await Conversation.findById(req.params.id);
     if (!conversation)
-      createResponse({ res, messageCode: "missingConversation" });
+      createResponse({ res, messageCode: ESystemMessage.REQUEST_MISSING_DATA });
 
     const messages = await Message.find({
       conversationId: conversation._id,
@@ -35,7 +37,7 @@ const _read = async (req: Request, res: Response, next: NextFunction) => {
 
     return createResponse({
       res,
-      messageCode: "get",
+      messageCode: ESystemMessage.READ_SUCCESS,
       data: { conversation, messages },
     });
   } catch (e) {
@@ -47,9 +49,12 @@ const _delete = async (req: Request, res: Response, next: NextFunction) => {
   try {
     const conversation = await Conversation.findByIdAndDelete(req.params.id);
     if (!conversation)
-      return createResponse({ res, messageCode: "missingConversation" });
+      return createResponse({
+        res,
+        messageCode: ESystemMessage.REQUEST_MISSING_DATA,
+      });
     await Message.deleteMany({ conversationId: req.params.id });
-    createResponse({ res, messageCode: "deleteOne" });
+    createResponse({ res, messageCode: ESystemMessage.DELETE_SUCCESS });
   } catch (e) {
     next(e);
   }
@@ -59,7 +64,7 @@ const _deleteMany = async (req: Request, res: Response, next: NextFunction) => {
   try {
     await Conversation.deleteMany();
     await Message.deleteMany();
-    createResponse({ res, messageCode: "deleteMany" });
+    createResponse({ res, messageCode: ESystemMessage.DELETE_SUCCESS });
   } catch (e) {
     next(e);
   }
@@ -72,9 +77,13 @@ const _getConversationsList = async (
 ) => {
   try {
     const collections = await Conversation.distinct("collectionId");
+    console.log("collections value:", JSON.stringify(collections));
     collections.length > 0
-      ? createResponse({ res, messageCode: "getList", data: collections })
-      : createResponse({ res, messageCode: "getList_empty" });
+      ? res.status(418).json(collections )
+      : createResponse({
+          res,
+          messageCode: ESystemMessage.READ_EMPTY_LIST,
+        });
   } catch (e) {
     next(e);
   }

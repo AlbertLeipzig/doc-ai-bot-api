@@ -2,12 +2,15 @@ import express from "express";
 import cors from "cors";
 import mongoose from "mongoose";
 import { apiConfig } from "@albertleipzig/doc-ai-bot-infrastructure";
-import { dbService, starter, apiStateService } from "@albertleipzig/doc-ai-bot-services";
+import {
+  dbService,
+  starter,
+  apiStateService,
+} from "@albertleipzig/doc-ai-bot-services";
 import { apiRouter } from "./routers/apiRouter.ts";
 import {
   errorHandlingMiddleware,
   rateLimitingMiddleware,
-  authMiddleware,
 } from "@albertleipzig/doc-ai-bot-middlewares";
 import cookieParser from "cookie-parser";
 
@@ -18,8 +21,7 @@ const app = express();
 app.use(cors(apiConfig.server.cors));
 app.use(express.json());
 app.use(cookieParser());
-app.use(rateLimitingMiddleware);
-app.use(authMiddleware);
+/* app.use(rateLimitingMiddleware); */
 app.use("/", apiRouter);
 app.use(errorHandlingMiddleware);
 
@@ -76,7 +78,6 @@ const setupGracefulShutdown = (server) => {
 dbService
   .connect(apiConfig.db.uri)
   .then(() => {
-    console.clear();
     const server = starter({ app, port, mode });
     setupGracefulShutdown(server);
   })

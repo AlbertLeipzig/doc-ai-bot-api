@@ -20,7 +20,7 @@
   "license": "ISC",
   "description": "",
   "dependencies": {
-    "@albertleipzig/doc-ai-bot-infrastructure": "^1.0.5",
+    "@albertleipzig/doc-ai-bot-infrastructure": "^1.0.6",
     "@albertleipzig/doc-ai-bot-middlewares": "^1.0.5",
     "@albertleipzig/doc-ai-bot-services": "^1.0.4",
     "@albertleipzig/doc-ai-bot-utils": "^1.0.10",
