@@ -1,10 +1,17 @@
 import type { Request, Response, NextFunction } from "express";
-import { ingester, generator, scraper } from "@albertleipzig/doc-ai-bot-services";
+import {
+  ingester,
+  generator,
+  scraper,
+} from "@albertleipzig/doc-ai-bot-services";
 import { VectorModel, VectorProfile } from "../models/index.ts";
 import { apiConfig } from "@albertleipzig/doc-ai-bot-infrastructure";
 import { createResponse } from "@albertleipzig/doc-ai-bot-utils";
 import { Types } from "mongoose";
-import { ESystemMessage, type VectorProfileData } from "@albertleipzig/doc-ai-bot-types";
+import {
+  ESystemMessage,
+  type VectorProfileData,
+} from "@albertleipzig/doc-ai-bot-types";
 import { profile } from "console";
 /* const _ingestSingleDocument = async (
   req: Request,
@@ -29,8 +36,8 @@ import { profile } from "console";
 
     // 2. Resolve collectionName
     let vectorProfileId = _vectorProfileId ?? null;
+    
     let collectionName: string;
-
     if (vectorProfileId) {
       const existing = await VectorProfile.findById(vectorProfileId).lean();
       if (!existing) {
@@ -112,16 +119,13 @@ const _ingestSingleDocument = async (
     chunkOverlap,
     model,
   });
-
   if (!loadedDocs.length)
     throw new Error(`No content extracted from ${baseUrl}`);
-
   const embeddedDocs = await ingester.ingestDocuments(loadedDocs, {
     model,
     chunkSize,
     chunkOverlap,
   });
-
   await VectorModel.insertMany(
     embeddedDocs.map((doc) => ({
       content: doc.content,
@@ -129,11 +133,8 @@ const _ingestSingleDocument = async (
       vectorProfileId,
     })),
   );
-
   return { totalChunks: embeddedDocs.length };
 };
-
-/*  */
 
 export const ingestionController = async (
   req: Request,
@@ -141,31 +142,23 @@ export const ingestionController = async (
   next: NextFunction,
 ) => {
   try {
-    const {
-      baseUrl,
-      model,
-      maxPages,
-      chunkSize,
-      chunkOverlap,
-      vectorProfileId,
-    } = req.body;
-
-    /* GUARDS */
+    const { baseUrl, model, chunkSize, chunkOverlap, vectorProfileId } =
+      req.body;
 
     const _model = model ?? apiConfig.llm.vectorModel;
     const _chunkSize = Number(chunkSize) || apiConfig.llm.embed.chunking.size;
     const _chunkOverlap =
       Number(chunkOverlap) || apiConfig.llm.embed.chunking.overlap;
     const _baseUrl = baseUrl ?? apiConfig.llm.docs.baseUrl;
-    const _maxPages = maxPages ?? apiConfig.llm.docs.maxPages;
-
-    /* Create VectorProfile if none is provided */
 
     let _vectorProfileId = vectorProfileId ?? "";
-
     if (!vectorProfileId) {
       const vectorProfile = await VectorProfile.create({
-        name: generator.vectorCollectionName({ model, chunkSize, chunkOverlap }),
+        name: generator.vectorCollectionName({
+          model,
+          chunkSize,
+          chunkOverlap,
+        }),
         model: _model,
         chunkSize: _chunkSize,
         chunkOverlap: _chunkOverlap,
@@ -173,34 +166,42 @@ export const ingestionController = async (
       if (!vectorProfile) {
         return createResponse({ res, messageCode: ESystemMessage.NOT_FOUND });
       }
-      if (vectorProfile) _vectorProfileId = vectorProfile._id;
+      _vectorProfileId = vectorProfile._id;
     }
 
-    /*  */
-
-    const _urls = await scraper.documentation({
-      baseUrl: _baseUrl,
-      maxPages: _maxPages,
-    });
+    const _urls = await scraper.documentation({ baseUrl: _baseUrl });
     if (!_urls?.length)
-      return createResponse({ res, messageCode: ESystemMessage.REQUEST_MISSING_DATA });
+      return createResponse({
+        res,
+        messageCode: ESystemMessage.REQUEST_MISSING_DATA,
+      });
 
-    const allDocs = [];
+    res
+      .status(202)
+      .json({ vectorProfileId: _vectorProfileId, totalPages: _urls.length });
+
+    const results: { totalChunks: number }[] = [];
     for (const url of _urls) {
       try {
-        const docs = await ingester.loadFromUrl(url, {
-          model: _model,
-          chunkSize: _chunkSize,
-          chunkOverlap: _chunkOverlap,
-        });
-        allDocs.push(...docs);
+        const result = await _ingestSingleDocument(
+          url,
+          _model,
+          _chunkSize,
+          _chunkOverlap,
+          _vectorProfileId,
+        );
+        results.push(result);
       } catch (e) {
-        next(e);
+        console.error(`[ingestionController] failed: ${url}`, e);
       }
     }
-    res.status(201).json(allDocs);
+
+    const totalChunks = results.reduce((sum, r) => sum + r.totalChunks, 0);
+    const failedPages = _urls.length - results.length;
+    console.log(
+      `[ingestionController] done — pages: ${_urls.length}, chunks: ${totalChunks}, failed: ${failedPages}`,
+    );
   } catch (e) {
-    console.log(e);
     next(e);
   }
 };

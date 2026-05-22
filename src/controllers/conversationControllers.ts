@@ -76,10 +76,10 @@ const _getConversationsList = async (
   next: NextFunction,
 ) => {
   try {
-    const collections = await Conversation.distinct("collectionId");
+    const collections = await Conversation.find().lean();
     console.log("collections value:", JSON.stringify(collections));
     collections.length > 0
-      ? res.status(418).json(collections )
+      ? res.status(200).json(collections )
       : createResponse({
           res,
           messageCode: ESystemMessage.READ_EMPTY_LIST,

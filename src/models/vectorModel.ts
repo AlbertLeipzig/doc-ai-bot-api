@@ -18,10 +18,12 @@ vectorSchema.index({ "metadata.chunkSize": 1, "metadata.overlapRatio": 1 });
 
 /* ABSTRACT! */
 
-const collectionName =
+/* const collectionName = apiConfig.llm.embed?.collectionName; */
+
+/* const collectionName =
   apiConfig.llm.embed?.collectionName ||
   process.env.COLLECTION_NAME ||
-  "vectors";
+  "vectors"; */
 
 export const getDynamicVectorModel = (collectionName: string) => {
   return (
@@ -31,4 +33,4 @@ export const getDynamicVectorModel = (collectionName: string) => {
 };
 
 export const VectorModel: Model<VectorData> =
-  models.Document || model("Vectors", vectorSchema, collectionName);
+  models.Document || model("Vectors", vectorSchema);
