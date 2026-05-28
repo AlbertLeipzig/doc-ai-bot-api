@@ -20,10 +20,10 @@
   "license": "ISC",
   "description": "",
   "dependencies": {
-    "@albertleipzig/doc-ai-bot-infrastructure": "^1.0.6",
-    "@albertleipzig/doc-ai-bot-middlewares": "^1.0.5",
-    "@albertleipzig/doc-ai-bot-services": "^1.0.7",
-    "@albertleipzig/doc-ai-bot-utils": "^1.0.10",
+    "@albertleipzig/doc-ai-bot-infrastructure": "^1.0.9",
+    "@albertleipzig/doc-ai-bot-middlewares": "^1.0.6",
+    "@albertleipzig/doc-ai-bot-services": "^1.0.8",
+    "@albertleipzig/doc-ai-bot-utils": "^1.0.12",
     "@langchain/textsplitters": "^1.0.1",
     "axios": "^1.13.5",
     "cheerio": "^1.2.0",
@@ -39,7 +39,7 @@
     "p-limit": "^7.3.0"
   },
   "devDependencies": {
-    "@albertleipzig/doc-ai-bot-types": "^1.0.6",
+    "@albertleipzig/doc-ai-bot-types": "^1.0.9",
     "@types/cookie-parser": "^1.4.10",
     "@types/cors": "^2.8.19",
     "@types/express": "^5.0.5",
