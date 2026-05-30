@@ -13,17 +13,18 @@
     "submodule:clone": "sh -c 'git submodule update --init $1' --",
     "submodule:pull": "sh -c 'git config -f .gitmodules submodule.$1.branch main && git submodule update --remote $1' --",
     "submodule:update": "sh -c 'cd ./src/$1 && git add . && git commit -m \"$2\" && git push' && cd ../.. && git add $1 && git commit -m \"$2\" && git push",
-    "typecheck": "tsc --noEmit -p tsconfig.json"
+    "typecheck": "tsc --noEmit -p tsconfig.json",
+    "dependencies:update": "npm i @albertleipzig/doc-ai-bot-infrastructure@latest @albertleipzig/doc-ai-bot-services@latest @albertleipzig/doc-ai-bot-utils@latest && npm i -D @albertleipzig/doc-ai-bot-types@latest"
   },
   "keywords": [],
   "author": "Albert_Fuchs",
   "license": "ISC",
   "description": "",
   "dependencies": {
-    "@albertleipzig/doc-ai-bot-infrastructure": "^1.0.9",
+    "@albertleipzig/doc-ai-bot-infrastructure": "^1.0.11",
     "@albertleipzig/doc-ai-bot-middlewares": "^1.0.6",
-    "@albertleipzig/doc-ai-bot-services": "^1.0.8",
-    "@albertleipzig/doc-ai-bot-utils": "^1.0.12",
+    "@albertleipzig/doc-ai-bot-services": "^1.0.10",
+    "@albertleipzig/doc-ai-bot-utils": "^1.0.14",
     "@langchain/textsplitters": "^1.0.1",
     "axios": "^1.13.5",
     "cheerio": "^1.2.0",
@@ -39,7 +40,7 @@
     "p-limit": "^7.3.0"
   },
   "devDependencies": {
-    "@albertleipzig/doc-ai-bot-types": "^1.0.9",
+    "@albertleipzig/doc-ai-bot-types": "^1.0.13",
     "@types/cookie-parser": "^1.4.10",
     "@types/cors": "^2.8.19",
     "@types/express": "^5.0.5",
