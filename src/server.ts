@@ -21,6 +21,7 @@ const app = express();
 app.use(cors(apiConfig.server.cors));
 app.use(express.json());
 app.use(cookieParser());
+
 /* app.use(rateLimitingMiddleware); */
 app.use("/", apiRouter);
 app.use(errorHandlingMiddleware);

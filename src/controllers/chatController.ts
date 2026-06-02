@@ -21,11 +21,13 @@ export const chatController = async (
       vectorProfileId,
       conversationId,
       topK = apiConfig.llm.retrieve.topK,
-      role = "user",
+      role
     } = req.body as AskBody;
 
+    console.log("body:", req.body);
+
     // 1. Validate
-    if (!question || !vectorProfileId)
+    if (!question || (!conversationId && !vectorProfileId))
       return createResponse({
         res,
         messageCode: ESystemMessage.REQUEST_MISSING_DATA,
@@ -35,7 +37,9 @@ export const chatController = async (
     // 2. Resolve conversation
     let resolvedConversationId = conversationId ?? null;
     if (resolvedConversationId) {
-      const existing = await Conversation.findById(resolvedConversationId).lean();
+      const existing = await Conversation.findById(
+        resolvedConversationId,
+      ).lean();
       if (!existing)
         return createResponse({
           res,
@@ -54,21 +58,27 @@ export const chatController = async (
     await Message.create({
       conversationId: resolvedConversationId,
       content: question,
-      role,
+      role
     });
 
     // 4. Retrieve relevant chunks
-    const queryEmbedding = await embedder.query({ text: question, config: apiConfig.llm });;
-    const pipeline = retriever.buildVectorSearchPipeline({
+    const queryEmbedding = await embedder.query({
+      text: question,
+      config: apiConfig.llm,
+    });
+    const retrieverService = retriever.service(apiConfig.llm.retrieve);
+
+    const pipeline = retrieverService.buildVectorSearchPipeline({
       queryEmbedding,
       vectorProfileId,
       k: topK,
     });
     const chunks = await VectorModel.collection.aggregate(pipeline).toArray();
-    const context = retriever.buildContext(chunks);
+    const context = retrieverService.buildContext(chunks);
 
     // 5. Generate answer
-    const { content: answer } = await generator.llmResponse([
+    const generatorService = generator(apiConfig.llm);
+    const { content: answer } = await generatorService.llmResponse([
       { role: "system", content: `Answer using this context:\n\n${context}` },
       { role: "user", content: question },
     ]);
@@ -77,7 +87,7 @@ export const chatController = async (
     await Message.create({
       conversationId: resolvedConversationId,
       content: answer,
-      role: "assistant",
+      role,
     });
 
     // 7. Respond
