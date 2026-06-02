@@ -5,7 +5,7 @@ import {
   scraper,
 } from "@albertleipzig/doc-ai-bot-services";
 import { VectorModel, VectorProfile } from "../models/index.ts";
-import { apiConfig } from "@albertleipzig/doc-ai-bot-infrastructure";
+import { apiConfig } from "../../apiConfig.ts";
 import { createResponse } from "@albertleipzig/doc-ai-bot-utils";
 import { Types } from "mongoose";
 import {

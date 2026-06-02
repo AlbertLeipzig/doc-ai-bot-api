@@ -80,7 +80,7 @@ export const apiConfig: ApiConfig = {
       secure: MODE === "production",
       maxAge: 24 * 60 * 60 * 1000,
     },
-    adminUser: ADMIN_USER || "",
-    adminPassword: ADMIN_PASSWORD || "",
+    adminUser: ADMIN_USER || "giant",
+    adminPassword: ADMIN_PASSWORD || "giant",
   },
 };

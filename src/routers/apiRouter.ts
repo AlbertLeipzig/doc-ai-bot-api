@@ -10,10 +10,11 @@ import { authMiddleware } from "@albertleipzig/doc-ai-bot-middlewares";
 export const apiRouter = Router();
 
 apiRouter.use("/", healthRouter);
-apiRouter.post("/chat", chatController);
 apiRouter.use("/auth", authRouter);
-/* apiRouter.use(authMiddleware); */
 
+apiRouter.use(authMiddleware);
+
+apiRouter.post("/chat", chatController);
 apiRouter.use("/conversation", conversationRouter);
 apiRouter.use("/rag", ragRouter);
 apiRouter.use("/vector", vectorRouter);

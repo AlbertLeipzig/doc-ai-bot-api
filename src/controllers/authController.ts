@@ -1,6 +1,6 @@
 import type { Request, Response, NextFunction } from "express";
 import jwt from "jsonwebtoken";
-import { apiConfig } from "@albertleipzig/doc-ai-bot-infrastructure";
+import { apiConfig } from "../../apiConfig.ts";
 import { createResponse } from "@albertleipzig/doc-ai-bot-utils";
 import { ESystemMessage } from "@albertleipzig/doc-ai-bot-types";
 const { cookieOptions } = apiConfig.server;

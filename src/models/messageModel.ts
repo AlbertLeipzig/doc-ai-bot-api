@@ -13,7 +13,7 @@ const messageSchema = new Schema<MessageData>(
     },
     role: {
       type: String,
-      enum: ["user", "assistant", "system"],
+      enum: ["user", "assistant", "system", "benchmark"],
       required: true,
     },
     content: {

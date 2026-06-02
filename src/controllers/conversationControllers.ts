@@ -1,6 +1,6 @@
 import type { NextFunction, Request, Response } from "express";
 import { Conversation, Message } from "../models/index.ts";
-import { apiConfig } from "@albertleipzig/doc-ai-bot-infrastructure";
+import { apiConfig } from "../../apiConfig.ts";
 import { generator } from "@albertleipzig/doc-ai-bot-services";
 import { createResponse } from "@albertleipzig/doc-ai-bot-utils";
 import { ESystemMessage } from "@albertleipzig/doc-ai-bot-types";
@@ -79,7 +79,7 @@ const _getConversationsList = async (
     const collections = await Conversation.find().lean();
     console.log("collections value:", JSON.stringify(collections));
     collections.length > 0
-      ? res.status(200).json(collections )
+      ? res.status(200).json(collections)
       : createResponse({
           res,
           messageCode: ESystemMessage.READ_EMPTY_LIST,

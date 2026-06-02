@@ -1,10 +1,15 @@
 import type { Request, Response, NextFunction } from "express";
 import { VectorModel, Message, Conversation } from "../models/index.ts";
-import { retriever, embedder, generator } from "@albertleipzig/doc-ai-bot-services";
-import { apiConfig } from "@albertleipzig/doc-ai-bot-infrastructure";
+import {
+  retriever,
+  embedder,
+  generator,
+} from "@albertleipzig/doc-ai-bot-services";
+import { apiConfig } from "../../apiConfig.ts";
 import type { AskBody } from "@albertleipzig/doc-ai-bot-types";
 import { createResponse } from "@albertleipzig/doc-ai-bot-utils";
 import { ESystemMessage } from "@albertleipzig/doc-ai-bot-types";
+
 export const chatController = async (
   req: Request,
   res: Response,
@@ -16,6 +21,7 @@ export const chatController = async (
       vectorProfileId,
       conversationId,
       topK = apiConfig.llm.retrieve.topK,
+      role = "user",
     } = req.body as AskBody;
 
     // 1. Validate
@@ -28,11 +34,8 @@ export const chatController = async (
 
     // 2. Resolve conversation
     let resolvedConversationId = conversationId ?? null;
-
     if (resolvedConversationId) {
-      const existing = await Conversation.findById(
-        resolvedConversationId,
-      ).lean();
+      const existing = await Conversation.findById(resolvedConversationId).lean();
       if (!existing)
         return createResponse({
           res,
@@ -41,21 +44,21 @@ export const chatController = async (
         });
     } else {
       const newConversation = await Conversation.create({
-        vectorProfileId: vectorProfileId,
+        vectorProfileId,
         topK,
       });
       resolvedConversationId = newConversation._id.toString();
     }
 
-    // 3. Persist user message
+    // 3. Persist question message
     await Message.create({
       conversationId: resolvedConversationId,
       content: question,
-      role: "user",
+      role,
     });
 
     // 4. Retrieve relevant chunks
-    const queryEmbedding = await embedder.query(question);
+    const queryEmbedding = await embedder.query({ text: question, config: apiConfig.llm });;
     const pipeline = retriever.buildVectorSearchPipeline({
       queryEmbedding,
       vectorProfileId,
