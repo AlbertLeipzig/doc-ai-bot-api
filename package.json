@@ -14,7 +14,7 @@
     "submodule:pull": "sh -c 'git config -f .gitmodules submodule.$1.branch main && git submodule update --remote $1' --",
     "submodule:update": "sh -c 'cd ./src/$1 && git add . && git commit -m \"$2\" && git push' && cd ../.. && git add $1 && git commit -m \"$2\" && git push",
     "typecheck": "tsc --noEmit -p tsconfig.json",
-    "dependencies:update": "npm i @albertleipzig/doc-ai-bot-infrastructure@latest @albertleipzig/doc-ai-bot-services@latest @albertleipzig/doc-ai-bot-utils@latest && npm i -D @albertleipzig/doc-ai-bot-types@latest"
+    "dependencies:update": "npm i @albertleipzig/doc-ai-bot-infrastructure@latest @albertleipzig/doc-ai-bot-services@latest @albertleipzig/doc-ai-bot-middlewares@latest @albertleipzig/doc-ai-bot-utils@latest && npm i -D @albertleipzig/doc-ai-bot-types@latest"
   },
   "keywords": [],
   "author": "Albert_Fuchs",
@@ -22,7 +22,7 @@
   "description": "",
   "dependencies": {
     "@albertleipzig/doc-ai-bot-infrastructure": "^1.0.16",
-    "@albertleipzig/doc-ai-bot-middlewares": "^1.0.6",
+    "@albertleipzig/doc-ai-bot-middlewares": "^1.0.13",
     "@albertleipzig/doc-ai-bot-services": "^1.0.15",
     "@albertleipzig/doc-ai-bot-utils": "^1.0.18",
     "@langchain/textsplitters": "^1.0.1",
