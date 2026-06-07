@@ -7,6 +7,7 @@ const { cookieOptions } = apiConfig.server;
 
 const _login = async (req: Request, res: Response, next: NextFunction) => {
   try {
+    console.log("login body:", req.body);
     const { username, password } = req.body;
 
     if (!username || !password) {
@@ -30,9 +31,12 @@ const _login = async (req: Request, res: Response, next: NextFunction) => {
     const token = jwt.sign({ username }, apiConfig.server.jwtSecret, {
       expiresIn: "24h",
     });
-
     res.cookie("token", token, cookieOptions);
-    createResponse({ res, messageCode: ESystemMessage.LOGGED_IN });
+    createResponse({
+      res,
+      messageCode: ESystemMessage.LOGGED_IN,
+      data: { token },
+    });
     /* res.status(200).json({ message: "Login successful" }); */
   } catch (e) {
     next(e);

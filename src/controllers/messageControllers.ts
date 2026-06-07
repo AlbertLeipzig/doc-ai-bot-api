@@ -1,5 +1,6 @@
 import type { NextFunction, Request, Response } from "express";
 import { Message } from "../models/index.ts";
+import { Conversation } from "../models/index.ts";
 import { isValidObjectId } from "mongoose";
 import { createResponse } from "@albertleipzig/doc-ai-bot-utils";
 import { ESystemMessage } from "@albertleipzig/doc-ai-bot-types";
@@ -8,10 +9,17 @@ const _create = async (req: Request, res: Response, next: NextFunction) => {
   try {
     const { conversationId, content, role = "user" } = req.body;
 
-    if (!content) return createResponse({ res, messageCode: ESystemMessage.REQUEST_MISSING_DATA });
+    if (!content)
+      return createResponse({
+        res,
+        messageCode: ESystemMessage.REQUEST_MISSING_DATA,
+      });
 
     if (!conversationId)
-      return createResponse({ res, messageCode: ESystemMessage.GENERAL_EXCEPTION });
+      return createResponse({
+        res,
+        messageCode: ESystemMessage.GENERAL_EXCEPTION,
+      });
 
     await Message.create({ conversationId, content, role });
     createResponse({ res, messageCode: ESystemMessage.CREATE_SUCCESS });
@@ -23,13 +31,20 @@ const _create = async (req: Request, res: Response, next: NextFunction) => {
 const _read = async (req: Request, res: Response, next: NextFunction) => {
   try {
     if (!isValidObjectId(req.params.id))
-      return createResponse({ res, messageCode: ESystemMessage.GENERAL_EXCEPTION });
+      return createResponse({
+        res,
+        messageCode: ESystemMessage.GENERAL_EXCEPTION,
+      });
 
     const message = await Message.findById(req.params.id).populate(
       "conversationId",
     );
     message
-      ? createResponse({ res, messageCode: ESystemMessage.READ_SUCCESS, data: message })
+      ? createResponse({
+          res,
+          messageCode: ESystemMessage.READ_SUCCESS,
+          data: message,
+        })
       : createResponse({ res, messageCode: ESystemMessage.NOT_FOUND });
   } catch (e) {
     next(e);
@@ -38,29 +53,45 @@ const _read = async (req: Request, res: Response, next: NextFunction) => {
 
 const _readMany = async (req: Request, res: Response, next: NextFunction) => {
   try {
-    const { conversationId } = req.params;
+    const { conversationId, vectorProfileId } = req.query as {
+      conversationId?: string;
+      vectorProfileId?: string;
+    };
 
-    const filter = conversationId ?? "";
+    if (!conversationId && !vectorProfileId) {
+      return createResponse({
+        res,
+        messageCode: ESystemMessage.REQUEST_MISSING_DATA,
+      });
+    }
 
-    const messages = await Message.find({ filter })
-      .sort({
-        createdAt: 1,
-      })
-      .populate("conversationId");
+    let conversationIds: string[];
+
+    if (conversationId) {
+      conversationIds = [conversationId as string];
+    } else {
+      const conversations = await Conversation.find({ vectorProfileId })
+        .select("_id")
+        .lean();
+      conversationIds = conversations.map((c) => c._id.toString());
+    }
+
+    const messages = await Message.find({
+      conversationId: { $in: conversationIds },
+    })
+      .sort({ createdAt: 1 })
+      .lean();
 
     messages?.length > 0
       ? createResponse({
           res,
           messageCode: ESystemMessage.READ_SUCCESS,
-          data: {
-            conversationId,
-            messages,
-          },
+          data: { messages },
         })
       : createResponse({
           res,
           messageCode: ESystemMessage.READ_EMPTY_LIST,
-          data: { conversationId },
+          data: { conversationIds, vectorProfileId },
         });
   } catch (e) {
     next(e);
