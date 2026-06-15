@@ -7,7 +7,6 @@ const { cookieOptions } = apiConfig.server;
 
 const _login = async (req: Request, res: Response, next: NextFunction) => {
   try {
-    console.log("login body:", req.body);
     const { username, password } = req.body;
 
     if (!username || !password) {

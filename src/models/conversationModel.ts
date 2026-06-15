@@ -16,6 +16,7 @@ const conversationSchema = new Schema<ConversationData>(
       trim: true,
     },
     topK: { type: Number, required: true },
+    benchmark: Boolean,
   },
   {
     timestamps: true,

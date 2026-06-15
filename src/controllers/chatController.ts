@@ -21,7 +21,8 @@ export const chatController = async (
       vectorProfileId,
       conversationId,
       topK = apiConfig.llm.retrieve.topK,
-      role
+      role,
+      benchmark
     } = req.body as AskBody;
 
     console.log("body:", req.body);
@@ -50,6 +51,7 @@ export const chatController = async (
       const newConversation = await Conversation.create({
         vectorProfileId,
         topK,
+        ...(benchmark && { benchmark: true }),
       });
       resolvedConversationId = newConversation._id.toString();
     }
@@ -58,7 +60,7 @@ export const chatController = async (
     await Message.create({
       conversationId: resolvedConversationId,
       content: question,
-      role
+      role,
     });
 
     // 4. Retrieve relevant chunks

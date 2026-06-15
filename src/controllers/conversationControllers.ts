@@ -8,9 +8,11 @@ import mongoose from "mongoose";
 
 const _create = async (req: Request, res: Response, next: NextFunction) => {
   try {
-    const { vectorProfileId, topK: rawTopK, content } = req.body;
+    const { vectorProfileId, topK: rawTopK, content, benchmark } = req.body;
 
-    const title = await generator.conversationTitle(content);
+    const generatorService = generator(apiConfig.llm);
+
+    const title = await generatorService.conversationTitle(content);
 
     const topK = rawTopK ?? apiConfig.llm.retrieve.topK;
 
@@ -18,6 +20,7 @@ const _create = async (req: Request, res: Response, next: NextFunction) => {
       title,
       vectorProfileId,
       topK,
+      benchmark,
     });
     createResponse({ res, messageCode: ESystemMessage.CREATE_SUCCESS });
   } catch (e) {
@@ -76,7 +79,12 @@ const _getConversationsList = async (
   next: NextFunction,
 ) => {
   try {
-    const collections = await Conversation.find().lean();
+    const { vectorProfileId } = req.query;
+
+    const filter: Record<string, unknown> = { benchmark: true };
+    if (vectorProfileId) filter.vectorProfileId = vectorProfileId;
+
+    const collections = await Conversation.find(filter).lean();
     console.log("collections value:", JSON.stringify(collections));
     collections.length > 0
       ? res.status(200).json(collections)

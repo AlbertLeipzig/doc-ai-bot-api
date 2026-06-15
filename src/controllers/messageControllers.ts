@@ -53,9 +53,10 @@ const _read = async (req: Request, res: Response, next: NextFunction) => {
 
 const _readMany = async (req: Request, res: Response, next: NextFunction) => {
   try {
-    const { conversationId, vectorProfileId } = req.query as {
+    const { conversationId, vectorProfileId, benchmark } = req.query as {
       conversationId?: string;
       vectorProfileId?: string;
+      benchmark?: string;
     };
 
     if (!conversationId && !vectorProfileId) {
@@ -68,12 +69,17 @@ const _readMany = async (req: Request, res: Response, next: NextFunction) => {
     let conversationIds: string[];
 
     if (conversationId) {
-      conversationIds = [conversationId as string];
+      conversationIds = [conversationId];
     } else {
-      const conversations = await Conversation.find({ vectorProfileId })
+      const filter: Record<string, unknown> = { vectorProfileId };
+      if (benchmark === "true") filter.benchmark = true;
+
+      const conversations = await Conversation.find(filter)
         .select("_id")
         .lean();
-      conversationIds = conversations.map((c) => c._id.toString());
+      conversationIds = conversations.map((c) =>
+        (c as { _id: string })._id.toString(),
+      );
     }
 
     const messages = await Message.find({
