@@ -79,11 +79,10 @@ const _getConversationsList = async (
   next: NextFunction,
 ) => {
   try {
-    const { vectorProfileId } = req.query;
-
-    const filter: Record<string, unknown> = { benchmark: true };
+    const { vectorProfileId, benchmark } = req.query;
+    const filter: Record<string, unknown> = {};
     if (vectorProfileId) filter.vectorProfileId = vectorProfileId;
-
+    if (benchmark !== undefined) filter.benchmark = benchmark === "true";
     const collections = await Conversation.find(filter).lean();
     console.log("collections value:", JSON.stringify(collections));
     collections.length > 0
