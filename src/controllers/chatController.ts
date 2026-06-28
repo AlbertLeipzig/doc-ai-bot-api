@@ -60,7 +60,7 @@ export const chatController = async (
     await Message.create({
       conversationId: resolvedConversationId,
       content: question,
-      role,
+      role : "user",
     });
 
     // 4. Retrieve relevant chunks
@@ -89,7 +89,7 @@ export const chatController = async (
     await Message.create({
       conversationId: resolvedConversationId,
       content: answer,
-      role,
+      role : "assistant",
     });
 
     // 7. Respond
