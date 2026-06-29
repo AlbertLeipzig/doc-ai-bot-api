@@ -99,7 +99,12 @@ const _getConversationsWithMessages = async (
           pipeline: [
             {
               $match: {
-                $expr: { $eq: ["$vectorProfileId", "$$profileIdStr"] },
+                $expr: {
+                  $and: [
+                    { $eq: ["$vectorProfileId", "$$profileIdStr"] },
+                    { $eq: ["$benchmark", true] },
+                  ],
+                },
               },
             },
           ],
@@ -112,7 +117,14 @@ const _getConversationsWithMessages = async (
           let: { convIds: "$conversations._id" },
           pipeline: [
             { $match: { $expr: { $in: ["$conversationId", "$$convIds"] } } },
-            { $project: { role: 1, content: 1, createdAt: 1, conversationId: 1 } },
+            {
+              $project: {
+                role: 1,
+                content: 1,
+                createdAt: 1,
+                conversationId: 1,
+              },
+            },
           ],
           as: "allMessages",
         },
