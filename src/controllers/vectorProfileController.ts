@@ -89,9 +89,10 @@ const _getConversationsWithMessages = async (
 ) => {
   try {
     const { id } = req.params;
+    const _id = Array.isArray(id) ? id[0] : id;
 
     const result = await VectorProfile.aggregate([
-      { $match: { _id: new mongoose.Types.ObjectId(id) } },
+      { $match: { _id: new mongoose.Types.ObjectId(_id) } },
       {
         $lookup: {
           from: "conversations",
