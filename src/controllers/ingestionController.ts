@@ -108,6 +108,7 @@ import { profile } from "console";
 }; */
 
 const generatorService = generator(apiConfig.llm);
+const ingesterService = ingester(apiConfig.llm);
 
 const _ingestSingleDocument = async (
   baseUrl: string,
@@ -116,13 +117,13 @@ const _ingestSingleDocument = async (
   chunkOverlap: number,
   vectorProfileId: string,
 ): Promise<{ totalChunks: number }> => {
-  const loadedDocs = await ingester.loadFromUrl({
+  const loadedDocs = await ingesterService.loadFromUrl({
     url: baseUrl,
     overrides: { chunkSize, chunkOverlap, model },
   });
   if (!loadedDocs.length)
     throw new Error(`No content extracted from ${baseUrl}`);
-  const embeddedDocs = await ingester.ingestDocuments({
+  const embeddedDocs = await ingesterService.ingestDocuments({
     documents: loadedDocs,
     options: { model, chunkSize, chunkOverlap },
   });
