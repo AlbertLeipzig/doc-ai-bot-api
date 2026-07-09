@@ -82,7 +82,7 @@ const getVectorProfileList = async (
   }
 };
 
-const _getConversationsWithMessages = async (
+const   _getConversationsWithMessages = async (
   req: Request,
   res: Response,
   next: NextFunction,

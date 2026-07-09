@@ -13,26 +13,31 @@ export const retrieveController = async (
   next: NextFunction,
 ) => {
   try {
-    const { query, k, _vectorProfileId } = req.body;
+    const { query, k, vectorProfileId } = req.body;
+
     if (!query)
       return createResponse({
         res,
         messageCode: ESystemMessage.REQUEST_MISSING_DATA,
       });
+
     const queryEmbedding = await embedder.query(query);
     const limit = retrieverService.getTopK(k);
+
     const totalDocs = await VectorModel.countDocuments(
-      _vectorProfileId ? { vectorProfileId: _vectorProfileId } : {},
+      vectorProfileId ? { vectorProfileId } : {},
     );
+
     if (totalDocs === 0) {
       return res.status(200).json([]);
     }
+
     let results = [];
     try {
       const pipeline = retrieverService.buildVectorSearchPipeline({
         queryEmbedding,
         k: limit,
-        vectorProfileId: _vectorProfileId,
+        vectorProfileId,
       });
       results = await VectorModel.collection.aggregate(pipeline).toArray();
     } catch (vectorError) {
@@ -41,6 +46,7 @@ export const retrieveController = async (
         vectorError instanceof Error ? vectorError.message : vectorError,
       );
     }
+
     res.status(200).json(results);
   } catch (e) {
     next(e);
